@@ -1,24 +1,28 @@
 # Aljabar Linier dan Geometri Tubes 1 Template
 
+## About this template
+
+This template is the starter file structure for Tubes 1 Algeo 2025/2026. This template is a Java project using Maven Build tool with JavaFX GUI already configured in pom.xml.
+
+In this project, you can choose if you want to develop to CLI or GUI app. The default is CLI, if you want GUI do uncomment the necessary part in App.java to run the template GUI test then run the commands below to run the app.
+
 ## Requirements
 
 Before building and running the **Matrix Calculator**, make sure you have the following installed:
 
 ### Java
 - **Version:** 17 or higher
-- **Download links (choose one that works):**
+- **Download links:**
   - [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads)
-  - [Eclipse Temurin OpenJDK 17](https://adoptium.net/temurin/releases)
-  - [Azul Zulu OpenJDK 17](https://www.azul.com/downloads)
 
 ### Maven
 - **Version:** 3.2.5 or higher (recommended 3.6.3+)
-- **Download links (choose one that works):**
+- **Download links:**
   - [Direct Apache Maven Official Downloads](https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip)
-  - [Apache Maven Official Downloads](https://maven.apache.org/download.cgi) 
-  - [Maven Repository for specific versions](https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.8.1)
 
 ### Additional installation info
+
+### Windows
 For maven installation, download the .zip and it should contain a directory with
 ```
 apache-maven-<version>/
@@ -31,7 +35,20 @@ apache-maven-<version>/
 ├── README.txt
 ```
 
-Put bin/ in environment PATH to use in terminal
+Put bin/ in environment PATH to use in terminal. [Add folder to PATH tutorial](https://www.youtube.com/watch?v=pGRw1bgb1gU)
+
+### Linux
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+sudo apt install maven -y
+```
+
+### MacOS
+```bash
+brew install openjdk@17
+brew install maven
+```
 
 ## How to develop
 
@@ -55,8 +72,14 @@ mvn clean compile
 ```
 
 2. Running the program
+To run CLI, run:
 ```bash
 mvn exec:java
+```
+
+To run GUI, be sure to uncomment the main GUI and run:
+```bash
+mvn clean javafx:run
 ```
 
 when the program is first run, it should print in terminal:
