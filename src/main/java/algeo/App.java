@@ -1,19 +1,11 @@
 package algeo;
 
-import algeo.core.Matrix;
-import algeo.io.MatrixIO;
+import algeo.io.*;
 
 public class App {
   public static void main(String[] args) {
-    System.out.println("Hai");
-    menu();
-  }
-
-  public static void menu() {
-    System.out.println("Selamat datang di Kalkulator keren!");
-    Matrix namaMatrix = MatrixIO.inputMatrix();
-    System.out.println("Matriks yang Anda masukkan adalah:");
-    System.out.println(namaMatrix);
+    Menu.menu();
+    Menu.choice();
   }
 }
 
