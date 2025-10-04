@@ -1,15 +1,13 @@
-// package algeo;
+package algeo;
 
-// import algeo.modules.ModuleContoh;
+import algeo.io.*;
 
-// public class App {
-//   public static void main(String[] args) {
-//     ModuleContoh m = new ModuleContoh();
-
-//     System.out.println("Hai");
-//     m.halo();
-//   }
-// }
+public class App {
+  public static void main(String[] args) {
+    Menu.menu();
+    Menu.choice();
+  }
+}
 
 // ====== MAIN GUI EXAMPLE ======
 // Be sure to uncoment the section below and follow the steps written in README
@@ -36,4 +34,3 @@
 //         launch(args);
 //     }
 // }
-
