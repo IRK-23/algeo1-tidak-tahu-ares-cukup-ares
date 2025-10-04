@@ -4,6 +4,9 @@ import algeo.spl.*;
 import java.util.Scanner;
 
 public class Menu {
+  // Global scanner untuk menghindari multiple instances
+  private static Scanner globalScanner = new Scanner(System.in);
+
   public static void menu() {
     System.out.println("██╗  ██╗  █████╗  ██╗     ██╗ ███╗   ██╗");
     System.out.println("██║ ██╔╝ ██╔══██╗ ██║     ██║ ████╗  ██║");
@@ -27,70 +30,85 @@ public class Menu {
   }
 
   public static void choice() {
-    Scanner cMenu = new Scanner(System.in);
-    System.out.println("\nSilakan pilih operasi yang ingin Anda lakukan:");
-
-    int menu = cMenu.nextInt();
+    int menu = -9999;
 
     do {
+      menu();
+      System.out.print("\nSilakan pilih operasi yang ingin Anda lakukan: ");
+      try {
+        menu = globalScanner.nextInt();
+      } catch (Exception e) {
+        System.out.println("Input tidak valid. Silakan masukkan angka.");
+        globalScanner.nextLine(); // Clear the invalid input
+        continue;
+      }
+
       if (menu == 1) {
         splIO();
         menu = -1;
-      } else if (menu == 2) {
-        determinanIO();
-        menu = -1;
-      } else if (menu == 3) {
-        inverseIO();
-        menu = -1;
-      } else if (menu == 4) {
-        interpolasiIO();
-        menu = -1;
-      } else if (menu == 5) {
-        regresiIO();
-        menu = -1;
+        // } else if (menu == 2) {
+        //   determinanIO();
+        //   menu = -1;
+        // } else if (menu == 3) {
+        //   inverseIO();
+        //   menu = -1;
+        // } else if (menu == 4) {
+        //   interpolasiIO();
+        //   menu = -1;
+        // } else if (menu == 5) {
+        //   regresiIO();
+        //   menu = -1;
       } else if (menu == 7) {
         System.out.print("\nTekan ENTER untuk kembali ke menu...");
-        cMenu.nextLine();
-        cMenu.nextLine();
-        menu = -1;
+        globalScanner.nextLine();
+        globalScanner.nextLine();
+
+      } else {
+        System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
       }
 
     } while (menu != 7);
-    cMenu.close();
   }
 
   public static void splIO() {
-    System.out.println("Metode SPL yang dapat dipilih");
-    System.out.println("---------------------------------------------");
-    System.out.println("1.  Eliminasi Gauss");
-    System.out.println("2.  Eliminasi Gauss-Jordan");
-    System.out.println("3.  Kaidah Cramer");
-    System.out.println("4.  Metode Matriks Balikan");
-    System.out.println("5.  Keluar");
-    System.out.println("---------------------------------------------");
 
-    Scanner cSPL = new Scanner(System.in);
-    System.out.println("\nSilakan pilih metode operasi yang ingin Anda lakukan:");
-
-    int menu = cSPL.nextInt();
+    int menu = -9999;
 
     do {
+      System.out.println("Metode SPL yang dapat dipilih");
+      System.out.println("---------------------------------------------");
+      System.out.println("1.  Eliminasi Gauss");
+      System.out.println("2.  Eliminasi Gauss-Jordan");
+      System.out.println("3.  Kaidah Cramer");
+      System.out.println("4.  Metode Matriks Balikan");
+      System.out.println("5.  Keluar");
+      System.out.println("---------------------------------------------");
+      System.out.print("\nSilakan pilih metode operasi yang ingin Anda lakukan: ");
+
+      try {
+        menu = globalScanner.nextInt();
+      } catch (Exception e) {
+        System.out.println("Input tidak valid. Silakan masukkan angka.");
+        globalScanner.nextLine(); // Clear the invalid input
+        continue;
+      }
+
       if (menu == 1) {
         Gauss.gauss();
         menu = -1;
-      }
-      // else if (menu == 2) spl.gaussjordan();
-      // else if (menu == 3) inverseIO();
-      // else if (menu == 4) interpolasiIO();
-      // else if (menu == 5) regresiIO();
-      // else if (menu == 7) {
-      //   System.out.print("\nTekan ENTER untuk kembali ke menu...");
-      //   cSPL.nextLine();
-      //   cSPL.nextLine();
-      // }
 
-    } while (menu != 7);
-    cSPL.close();
+      } else if (menu == 2) {
+        Gauss.gaussjordan();
+        menu = -1;
+
+      } else if (menu == 5) {
+        System.out.println("Kembali ke menu utama...");
+        break;
+      } else {
+        System.out.println("Pilihan tidak valid. Silakan pilih 1-5.");
+      }
+
+    } while (menu != 5 && menu != -1);
   }
 
   public static void determinanIO() {}
@@ -100,4 +118,10 @@ public class Menu {
   public static void interpolasiIO() {}
 
   public static void regresiIO() {}
+
+  public static void cleanup() {
+    if (globalScanner != null) {
+      globalScanner.close();
+    }
+  }
 }

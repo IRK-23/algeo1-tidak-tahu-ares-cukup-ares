@@ -4,16 +4,17 @@ import algeo.core.Matrix;
 import java.util.Scanner;
 
 public class MatrixIO {
+  // Scanner global untuk konsistensi dengan Menu
+  private static Scanner scanner = new Scanner(System.in);
+  
   public static Matrix inputMatrix() {
-    Scanner scanner = new Scanner(System.in);
 
-    System.out.println("Masukkan jumlah baris: ");
+    System.out.print("Masukkan jumlah baris: ");
     int rows = scanner.nextInt();
-    System.out.println("Masukkan jumlah kolom: ");
+    System.out.print("Masukkan jumlah kolom: ");
     int cols = scanner.nextInt();
 
     if (rows <= 0 || cols <= 0) {
-      scanner.close();
       throw new IllegalArgumentException("Jumlah baris dan kolom harus lebih dari 0.");
     }
 
@@ -29,7 +30,8 @@ public class MatrixIO {
 
     Matrix matrixIn = new Matrix(doublearrayIn);
 
-    scanner.close();
+    // JANGAN tutup scanner karena akan menutup System.in
+    // scanner.close();
     return matrixIn;
   }
 }
