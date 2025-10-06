@@ -2,7 +2,9 @@ package algeo.inverse;
 
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
+import algeo.core.NumberFmt;
 import algeo.determinant.CofactorDeterminant;
+import algeo.io.MatrixIO;
 
 /**
  * Inverse menggunakan adjoin : A^-1 = adj(A) / det(A).
@@ -27,21 +29,23 @@ public final class AdjointInverse {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 double[][] minor = new double[n-1][n-1];
-                for (int r = 0, mi = 0; r < n; r++) {
+                int mi = 0;
+                for (int r = 0; r < n; r++) {
                     if (r == i) continue;
-                    for (int c = 0, mj = 0; c < n; c++) {
+                    int mj = 0;
+                    for (int c = 0; c < n; c++) {
                         if (c == j) continue;
                         minor[mi][mj++] = A.get(r, c);
                     }
                     mi++;
                 }
-                double cof = CofactorDeterminant.of(new Matrix(minor), eps);
-                double sign = (((i + j) & 1) == 0) ? 1.0 : -1.0;
-                adj.set(j, i, sign * cof);
+                Matrix m = new Matrix(minor);
+                double cofactor = CofactorDeterminant.of(m, eps);
+                if (((i + j) & 1) != 0) cofactor = -cofactor;
+                adj.set(j, i, cofactor);
             }
         }
 
-        // bagi adjoin dengan determinan
         Matrix inv = new Matrix(n, n);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -49,5 +53,29 @@ public final class AdjointInverse {
             }
         }
         return inv;
+    }
+
+    public static void run() {
+        Matrix A = MatrixIO.inputMatrix();
+        if (A == null) {
+            System.out.println("Input dibatalkan.");
+            return;
+        }
+        if (!A.isSquare()) {
+            System.out.println("Matriks harus persegi untuk inverse.");
+            return;
+        }
+        try {
+            Matrix inv = inverse(A);
+            System.out.println("Inverse (adjoint) =");
+            for (int i = 0; i < inv.rows(); i++) {
+                for (int j = 0; j < inv.cols(); j++) {
+                    System.out.print(NumberFmt.format3(inv.get(i, j)) + (j + 1 < inv.cols() ? " " : ""));
+                }
+                System.out.println();
+            }
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Tidak dapat menghitung inverse: " + ex.getMessage());
+        }
     }
 }

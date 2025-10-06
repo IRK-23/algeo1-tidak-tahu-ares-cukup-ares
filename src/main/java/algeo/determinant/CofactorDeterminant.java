@@ -2,6 +2,8 @@ package algeo.determinant;
 
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
+import algeo.core.NumberFmt;
+import algeo.io.MatrixIO;
 
 /**
  * Determinan menggunakan ekspansi kofaktor
@@ -34,12 +36,26 @@ public final class CofactorDeterminant {
                     minor[i-1][mj++] = A.get(i, j);
                 }
             }
-            Matrix M = new Matrix(minor);
-            double sub = detRecursive(M, eps);
-            double sign = ((col & 1) == 0) ? 1.0 : -1.0; 
-            det += sign * A.get(0, col) * sub;
+            Matrix m = new Matrix(minor);
+            double cofactor = ((col % 2) == 0 ? 1 : -1) * A.get(0, col) * detRecursive(m, eps);
+            det += cofactor;
         }
-        if (Math.abs(det) < eps) return 0.0;
+        if (Math.abs(det) < eps) det = 0.0;
         return det;
+    }
+
+    /** CLI helper: input matrix dulu lalu tampilkan determinan (kofaktor). */
+    public static void run() {
+        Matrix M = MatrixIO.inputMatrix();
+        if (M == null) {
+            System.out.println("Input dibatalkan.");
+            return;
+        }
+        if (!M.isSquare()) {
+            System.out.println("Matriks harus persegi untuk menghitung determinan.");
+            return;
+        }
+        double det = of(M);
+        System.out.println("Determinan (kofaktor) = " + NumberFmt.format3(det));
     }
 }

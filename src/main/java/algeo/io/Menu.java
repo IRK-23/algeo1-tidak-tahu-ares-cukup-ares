@@ -1,7 +1,15 @@
 package algeo.io;
 
-import algeo.spl.*;
 import java.util.Scanner;
+
+import algeo.determinant.CofactorDeterminant;
+import algeo.determinant.RowReductionDeterminant;
+import algeo.inverse.AdjointInverse;
+import algeo.inverse.AugmentInverse;
+import algeo.spl.Cramer;
+import algeo.spl.Gauss;
+import algeo.spl.GaussJordan;
+import algeo.spl.InverseMethod;
 
 public class Menu {
   private static Scanner globalScanner = new Scanner(System.in);
@@ -45,19 +53,21 @@ public class Menu {
       if (menu == 1) {
         splIO();
         menu = -1;
-        // } else if (menu == 2) {
-        //   determinanIO();
-        //   menu = -1;
-        // } else if (menu == 3) {
-        //   inverseIO();
-        //   menu = -1;
+      } else if (menu == 2){
+          determinanIO();
+          menu = -1;
+        }
+         else if (menu == 3) {
+          inverseIO();
+          menu = -1;
+        }
         // } else if (menu == 4) {
         //   interpolasiIO();
         //   menu = -1;
         // } else if (menu == 5) {
         //   regresiIO();
         //   menu = -1;
-      } else if (menu == 7) {
+       else if (menu == 7) {
         System.out.print("\nTekan ENTER untuk kembali ke menu...");
         globalScanner.nextLine();
         globalScanner.nextLine();
@@ -106,6 +116,8 @@ public class Menu {
         Cramer.cramer();
         menu = -1;
         waitForEnter();
+      } else if (menu == 4) {
+        InverseMethod.inverseMethod();
 
       } else if (menu == 5) {
         System.out.println("Kembali ke menu utama...");
@@ -117,9 +129,80 @@ public class Menu {
     } while (menu != 5 && menu != -1);
   }
 
-  public static void determinanIO() {}
+  public static void determinanIO() {
+    int menu = -9999;
+    do {
+      System.out.println("Metode Determinan yang dapat dipilih");
+      System.out.println("---------------------------------------------");
+      System.out.println("1.  Matriks Kofaktor ");
+      System.out.println("2.  OBE");
+      System.out.println("3.  Keluar");
+      System.out.println("---------------------------------------------");
+      System.out.print("\nSilakan pilih metode operasi yang ingin Anda lakukan: ");
 
-  public static void inverseIO() {}
+      try {
+        menu = globalScanner.nextInt();
+      } catch (Exception e) {
+        System.out.println("Input tidak valid. Silakan masukkan angka.");
+        globalScanner.nextLine();
+        continue;
+      }
+
+      if (menu == 1) {
+        CofactorDeterminant.run();
+        menu = -1;
+        waitForEnter();
+
+      } else if (menu == 2) {
+        RowReductionDeterminant.run();
+        menu = -1;
+        waitForEnter();
+
+      } else if (menu == 3) {
+        System.out.println("Kembali ke menu utama...");
+        break;
+
+      } else {
+        System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+      }
+
+    } while (menu != 3 && menu != -1);
+  }
+  public static void inverseIO() {
+    int menu = -9999;
+    do {
+      System.out.println("Metode Matriks Balikan yang dapat dipilih");
+      System.out.println("---------------------------------------------");
+      System.out.println("1.  Augment + RREF");
+      System.out.println("2.  Adjoint / Adjoin");
+      System.out.println("3.  Keluar");
+      System.out.println("---------------------------------------------");
+      System.out.print("\nSilakan pilih metode operasi yang ingin Anda lakukan: ");
+
+      try {
+        menu = globalScanner.nextInt();
+      } catch (Exception e) {
+        System.out.println("Input tidak valid. Silakan masukkan angka.");
+        globalScanner.nextLine();
+        continue;
+      }
+
+      if (menu == 1) {
+        AugmentInverse.run();
+        menu = -1;
+        waitForEnter();
+      } else if (menu == 2) {
+        AdjointInverse.run();
+        menu = -1;
+        waitForEnter();
+      } else if (menu == 3) {
+        System.out.println("Kembali ke menu utama...");
+        break;
+      } else {
+        System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+      }
+    } while (menu != 3 && menu != -1);
+  }
 
   public static void interpolasiIO() {}
 
@@ -137,3 +220,4 @@ public class Menu {
     }
   }
 }
+
