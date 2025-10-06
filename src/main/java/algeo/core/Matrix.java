@@ -180,6 +180,10 @@ public class Matrix {
 
   // ---- Representasi string (delegasi ke NumberFmt) ----
 
+  public void printMatrix(Matrix M) {
+    System.out.println(M);
+  }
+
   @Override
   public String toString() {
     // Representasi ringkas untuk debugging/CLI.
