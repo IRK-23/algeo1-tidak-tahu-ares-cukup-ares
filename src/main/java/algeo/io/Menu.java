@@ -63,14 +63,14 @@ public class Menu {
           inverseIO();
           menu = -1;
         }
-        // case 4 -> {
-        //   interpolasiIO();
-        //   menu = -1;
-        // }
-        case 5 -> {
-          regresiPolinomialBergandaIO();
+        case 4 -> {
+          interpolasiIO();
           menu = -1;
         }
+        // case 5 -> {
+        //   regresiPolinomialBergandaIO();
+        //   menu = -1;
+        // }
         case 7 -> {
           System.out.print("\nTekan ENTER untuk kembali ke menu...");
           globalScanner.nextLine();
@@ -204,10 +204,10 @@ public class Menu {
   public static void interpolasiIO() {}
 
   public static void regresiPolinomialBergandaIO() {
-    int menu = -9999;
-    do {
-    //isi langsung dengan metode IO regresi polinomial berganda
-    }
+    // int menu = -9999;
+    // do {
+    // //isi langsung dengan metode IO regresi polinomial berganda
+    // }
   }
 
   public static void waitForEnter() {
