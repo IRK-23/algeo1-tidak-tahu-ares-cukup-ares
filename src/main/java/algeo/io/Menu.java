@@ -12,7 +12,7 @@ import algeo.interpolasi.*;
 import java.util.Scanner;
 
 public class Menu {
-  private static Scanner globalScanner = new Scanner(System.in);
+  private static final Scanner globalScanner = new Scanner(System.in);
 
   public static void menu() {
     System.out.println("██╗  ██╗  █████╗  ██╗     ██╗ ███╗   ██╗");
@@ -30,7 +30,7 @@ public class Menu {
     System.out.println("2.  Determinan");
     System.out.println("3.  Matriks Balikan");
     System.out.println("4.  Interpolasi");
-    System.out.println("5.  Regresi Polinomial");
+    System.out.println("5.  Regresi Polinomial Berganda");
     System.out.println("6.  Operasi Standar Matrix");
     System.out.println("7.  Keluar");
     System.out.println("---------------------------------------------");
@@ -50,31 +50,33 @@ public class Menu {
         continue;
       }
 
-      if (menu == 1) {
-        splIO();
-        menu = -1;
-      } else if (menu == 2) {
-        determinanIO();
-        menu = -1;
-      } else if (menu == 3) {
-        inverseIO();
-        menu = -1;
-
-      } else if (menu == 4) {
-        interpolasiIO();
-        menu = -1;
-
-        // } else if (menu == 5) {
-        //   regresiIO();
+      switch (menu) {
+        case 1 -> {
+          splIO();
+          menu = -1;
+        }
+        case 2 -> {
+          determinanIO();
+          menu = -1;
+        }
+        case 3 -> {
+          inverseIO();
+          menu = -1;
+        }
+        case 4 -> {
+          interpolasiIO();
+          menu = -1;
+        }
+        // case 5 -> {
+        //   regresiPolinomialBergandaIO();
         //   menu = -1;
-
-      } else if (menu == 7) {
-        System.out.print("\nTekan ENTER untuk kembali ke menu...");
-        globalScanner.nextLine();
-        globalScanner.nextLine();
-
-      } else {
-        System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
+        // }
+        case 7 -> {
+          System.out.print("\nTekan ENTER untuk kembali ke menu...");
+          globalScanner.nextLine();
+          globalScanner.nextLine();
+        }
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
       }
 
     } while (menu != 7);
@@ -103,29 +105,25 @@ public class Menu {
         continue;
       }
 
-      if (menu == 1) {
-        Gauss.gauss();
-        menu = -1;
-        waitForEnter();
-
-      } else if (menu == 2) {
-        GaussJordan.gaussjordan();
-        menu = -1;
-        waitForEnter();
-
-      } else if (menu == 3) {
-        Cramer.cramer();
-        menu = -1;
-        waitForEnter();
-
-      } else if (menu == 4) {
-        InverseMethod.inverseMethod();
-
-      } else if (menu == 5) {
-        System.out.println("Kembali ke menu utama...");
-        break;
-      } else {
-        System.out.println("Pilihan tidak valid. Silakan pilih 1-5.");
+      switch (menu) {
+        case 1 -> {
+          Gauss.gauss();
+          menu = -1;
+          waitForEnter();
+        }
+        case 2 -> {
+          GaussJordan.gaussjordan();
+          menu = -1;
+          waitForEnter();
+        }
+        case 3 -> {
+          Cramer.cramer();
+          menu = -1;
+          waitForEnter();
+        }
+        case 4 -> InverseMethod.inverseMethod();
+        case 5 -> System.out.println("Kembali ke menu utama...");
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-5.");
       }
 
     } while (menu != 5 && menu != -1);
@@ -150,22 +148,19 @@ public class Menu {
         continue;
       }
 
-      if (menu == 1) {
-        CofactorDeterminant.run();
-        menu = -1;
-        waitForEnter();
-
-      } else if (menu == 2) {
-        RowReductionDeterminant.run();
-        menu = -1;
-        waitForEnter();
-
-      } else if (menu == 3) {
-        System.out.println("Kembali ke menu utama...");
-        break;
-
-      } else {
-        System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+      switch (menu) {
+        case 1 -> {
+          CofactorDeterminant.run();
+          menu = -1;
+          waitForEnter();
+        }
+        case 2 -> {
+          RowReductionDeterminant.run();
+          menu = -1;
+          waitForEnter();
+        }
+        case 3 -> System.out.println("Kembali ke menu utama...");
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
       }
 
     } while (menu != 3 && menu != -1);
@@ -190,19 +185,19 @@ public class Menu {
         continue;
       }
 
-      if (menu == 1) {
-        AugmentInverse.run();
-        menu = -1;
-        waitForEnter();
-      } else if (menu == 2) {
-        AdjointInverse.run();
-        menu = -1;
-        waitForEnter();
-      } else if (menu == 3) {
-        System.out.println("Kembali ke menu utama...");
-        break;
-      } else {
-        System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+      switch (menu) {
+        case 1 -> {
+          AugmentInverse.run();
+          menu = -1;
+          waitForEnter();
+        }
+        case 2 -> {
+          AdjointInverse.run();
+          menu = -1;
+          waitForEnter();
+        }
+        case 3 -> System.out.println("Kembali ke menu utama...");
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
       }
     } while (menu != 3 && menu != -1);
   }
@@ -240,7 +235,12 @@ public class Menu {
     } while (menu != 3 && menu != -1);
   }
 
-  public static void regresiIO() {}
+  public static void regresiPolinomialBergandaIO() {
+    // int menu = -9999;
+    // do {
+    // //isi langsung dengan metode IO regresi polinomial berganda
+    // }
+  }
 
   public static void waitForEnter() {
     System.out.println("Tekan ENTER untuk melanjutkan program");
