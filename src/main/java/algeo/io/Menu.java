@@ -70,6 +70,8 @@ public class Menu {
         //   regresiPolinomialBergandaIO();
         //   menu = -1;
         // }
+        // case 6 -> {
+        //   MatrixOperationIO.run();
         case 7 -> {
           System.out.print("\nTekan ENTER untuk kembali ke menu...");
           globalScanner.nextLine();
