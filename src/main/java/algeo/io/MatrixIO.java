@@ -45,6 +45,14 @@ public class MatrixIO {
     return new Matrix(data);
   }
 
+  public static Matrix inputRectMatrix(Scanner sc) {
+      System.out.println("\n== Input Matriks Umum (n × m) ==");
+      int rows = askInt(sc, "Masukkan jumlah baris (n, 1–" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+      int cols = askInt(sc, "Masukkan jumlah kolom (m, 1–" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+      double[][] data = readRows(sc, rows, cols);
+      return new Matrix(data);
+  }
+
   public static Matrix readMatrixFromUser(Scanner sc) {
     System.out.println("\n== Baca Matriks dari File ==");
     while (true) {

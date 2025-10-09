@@ -1,9 +1,12 @@
 package algeo.regression;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
+import algeo.io.*;
 import algeo.core.Matrix;
 import algeo.core.NumberFmt;
 
@@ -210,42 +213,78 @@ public final class MultivariatePolynomialRegression {
     }
 
     private static double[] solveByGaussJordan(Matrix A, Matrix b, double eps) {
-        Matrix aug = A.augment(b);
+        if (A == null || b == null) throw new IllegalArgumentException("A/b null");
+        if (A.rows() != A.cols()) throw new IllegalArgumentException("A harus persegi");
+        if (b.rows() != A.rows() || b.cols() != 1) throw new IllegalArgumentException("b harus vektor kolom n×1");
+
         final int n = A.rows();
 
-        int r = 0;
-        for (int c = 0; c < n && r < n; c++) {
-            // pilih pivot: partial pivoting (maks |elemen|)
-            int pivot = r;
-            double best = Math.abs(aug.get(pivot, c));
-            for (int i = r + 1; i < n; i++) {
-                double v = Math.abs(aug.get(i, c));
-                if (v > best) { best = v; pivot = i; }
-            }
-            if (best <= eps) throw new ArithmeticException("Matriks singular/hampir singular (pivot ~ 0).");
-            if (pivot != r) aug.swapRows(pivot, r);
-
-            // normalisasi pivot → 1
-            double pv = aug.get(r, c);
-            if (Math.abs(pv - 1.0) > eps) aug.scaleRow(r, 1.0 / pv);
-            aug.set(r, c, 1.0); // rapikan
-
-            // eliminasi kolom c pada baris lain
-            for (int i = 0; i < n; i++) {
-                if (i == r) continue;
-                double factor = aug.get(i, c);
-                if (Math.abs(factor) <= eps) continue;
-                aug.addRowMultiple(i, r, -factor);
-                aug.set(i, c, 0.0);
-            }
-            r++;
+        if (algeo.core.MatrixOps.cekRank(A) < n) {
+            throw new ArithmeticException("Matriks singular atau tak berbalik (rank(A) < n).");
         }
 
-        // Ambil kolom solusi (kanan) sebagai submatrix (0..n-1, n..n)
-        Matrix solCol = aug.submatrix(0, n - 1, n, n);
+        // Bentuk augmented [A | b], RREF-kan
+        Matrix aug = A.augment(b);
+        Matrix rrefAug = algeo.core.MatrixOps.rref(aug);
+
+        // Opsional: cek inkonsistensi baris nol di kiri tapi y non-nol
+        for (int i = 0; i < n; i++) {
+            boolean leftAllZero = true;
+            for (int j = 0; j < n; j++) {
+                if (Math.abs(rrefAug.get(i, j)) > eps) { leftAllZero = false; break; }
+            }
+            if (leftAllZero && Math.abs(rrefAug.get(i, n)) > eps) {
+                throw new ArithmeticException("Sistem tidak konsisten (0 = c ≠ 0).");
+            }
+        }
+
+        // Ambil solusi dari kolom terakhir
         double[] x = new double[n];
-        for (int i = 0; i < n; i++) x[i] = solCol.get(i, 0);
+        for (int i = 0; i < n; i++) x[i] = rrefAug.get(i, n);
         return x;
+    }
+
+    public static void run(Scanner sc) {
+        System.out.println("\n== Regresi Polinomial Berganda ==");
+        System.out.println("Format data: n x (k+1) | kolom 0..k-1 = fitur, kolom k = y");
+
+        // baca degree dan eps
+        int degree = UiPrompts.askInt(sc, "Masukkan derajat polinom: ", 0, 9);
+        double eps = UiPrompts.askDouble(sc, "Masukkan eps numerik (contoh 1e-12): ", 0.0, Double.POSITIVE_INFINITY);
+
+        // pilih sumber input
+        UiPrompts.InputChoice ic = UiPrompts.askInputChoice(sc);
+        Matrix samples;
+        try {
+            samples = (ic == UiPrompts.InputChoice.FILE)
+                    ? MatrixIO.readMatrixFromFile(UiPrompts.askPath(sc, "Masukkan path file samples (.txt): "))
+                    : MatrixIO.inputRectMatrix(sc);
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            return;
+        }
+
+        // fit
+        MultivariatePolynomialRegression.Model model =
+                MultivariatePolynomialRegression.fit(samples, degree, eps);
+
+        // tampilkan & simpan
+        String nl = System.lineSeparator();
+        StringBuilder body = new StringBuilder();
+        body.append("Derajat: ").append(model.degree()).append(nl);
+        body.append("Variabel: ").append(model.variables()).append(nl);
+        body.append("Persamaan: ").append(model.toEquationString()).append(nl).append(nl);
+
+        double[] beta = model.coefficients();
+        var terms = model.terms();
+        body.append("Koefisien (urut sesuai basis):").append(nl);
+        for (int j = 0; j < beta.length; j++) {
+            body.append(String.format("  %-14s = %.6f%n", terms.get(j).name(), beta[j]));
+        }
+
+        System.out.println("\n" + body);
+        ResultSaver.maybeSaveText(sc, "regression", "Regresi Polinomial Berganda", body.toString());
+
     }
 }
 

@@ -1,14 +1,16 @@
 package algeo.io;
 
+import algeo.regression.MultivariatePolynomialRegression;
 import algeo.determinant.*;
 import algeo.interpolasi.*;
 import algeo.inverse.*;
 import algeo.spl.*;
+
 import java.util.Scanner;
 
 public class Menu {
   private static final Scanner globalScanner = new Scanner(System.in);
-
+  
   public static void menu() {
     System.out.println("██╗  ██╗  █████╗  ██╗     ██╗ ███╗   ██╗");
     System.out.println("██║ ██╔╝ ██╔══██╗ ██║     ██║ ████╗  ██║");
@@ -26,8 +28,7 @@ public class Menu {
     System.out.println("3.  Matriks Balikan");
     System.out.println("4.  Interpolasi");
     System.out.println("5.  Regresi Polinomial Berganda");
-    System.out.println("6.  Operasi Standar Matrix");
-    System.out.println("7.  Keluar");
+    System.out.println("6.  Keluar");
     System.out.println("---------------------------------------------");
   }
 
@@ -66,21 +67,20 @@ public class Menu {
           menu = -1;
           waitForEnter();
         }
-        // case 5 -> {
-        //   regresiPolinomialBergandaIO();
-        //   menu = -1;
-        // }
-        // case 6 -> {
-        //   MatrixOperationIO.run();
-        case 7 -> {
+        case 5 -> {
+          regresiPolinomialBergandaIO();
+          menu = -1;
+          waitForEnter();
+        }
+        case 6 -> {
           System.out.print("\nTekan ENTER untuk kembali ke menu...");
           globalScanner.nextLine();
           globalScanner.nextLine();
         }
-        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-6.");
       }
 
-    } while (menu != 7);
+    } while (menu != 6);
   }
 
   public static void splIO() {
@@ -241,10 +241,8 @@ public class Menu {
   }
 
   public static void regresiPolinomialBergandaIO() {
-    // int menu = -9999;
-    // do {
-    // //isi langsung dengan metode IO regresi polinomial berganda
-    // }
+    globalScanner.nextLine();
+    MultivariatePolynomialRegression.run(globalScanner);
   }
 
   public static void waitForEnter() {
@@ -253,8 +251,6 @@ public class Menu {
   }
 
   public static void cleanup() {
-    if (globalScanner != null) {
-      globalScanner.close();
-    }
+    if (globalScanner != null) globalScanner.close();
   }
 }
