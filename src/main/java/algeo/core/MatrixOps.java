@@ -4,7 +4,7 @@ public final class MatrixOps {
   private MatrixOps() {}
 
   /** Epsilon default untuk komputasi numerik. */
-  public static final double EPS = 1e-12;
+  public static final double EPS = 1e-15;
 
   /* ===========  REF  ============= */
 

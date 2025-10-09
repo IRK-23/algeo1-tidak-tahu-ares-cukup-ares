@@ -44,6 +44,14 @@ public class Matrix {
     return I;
   }
 
+    public static int sumRows(Matrix M, int n) {
+        int sum = 0;
+        for (int i = 0; i < M.cols(); i++) {
+            sum += M.get(n, i);
+        }
+        return sum;
+    }
+
   // ---- Ukuran & properti ----
 
   public int rows() {

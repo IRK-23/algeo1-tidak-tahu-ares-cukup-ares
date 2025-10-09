@@ -20,20 +20,25 @@ public class Gauss {
       StringBuilder equation = new StringBuilder();
       for (int j = 0; j < n; j++) {
         double coef = M.get(i, j);
-        if (coef != 0) {
+        if (coef >= MatrixOps.EPS) {
           if (equation.length() > 0 && coef > 0) {
             equation.append(" + ");
           } else if (coef < 0) {
             equation.append(" - ");
           }
-          if (Math.abs(coef) != 1 || j == n - 1) {
-            equation.append(Math.abs(coef));
+
+          if (Math.abs(Math.abs(coef)) != 1.0) {
+            equation.append(NumberFmt.format3(Math.abs(coef)));
           }
+
           equation.append("x").append(j + 1);
         }
       }
       equation.append(" = ").append(rhs);
-      System.out.println("Persamaan: " + equation.toString());
+
+      if (Matrix.sumRows(M, i) != 0) {
+        System.out.println("Persamaan: " + equation.toString());
+      }
 
       double sum = 0;
       for (int j = i + 1; j < n; j++) {
@@ -86,7 +91,7 @@ public class Gauss {
       }
 
       if (M.get(i_max, cP) == 0) {
-        System.out.println("Kolom ini hanya berisi nol. Pindah ke kolom berikutnya.");
+        System.out.println("Kolom ini hanya berisi nol. Pindah ke kolom berikutnya.\n");
         cP++;
       } else {
         if (rP != i_max) {

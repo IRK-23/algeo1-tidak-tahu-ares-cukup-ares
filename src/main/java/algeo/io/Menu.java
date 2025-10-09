@@ -1,15 +1,10 @@
 package algeo.io;
 
+import algeo.determinant.*;
+import algeo.interpolasi.*;
+import algeo.inverse.*;
+import algeo.spl.*;
 import java.util.Scanner;
-
-import algeo.determinant.CofactorDeterminant;
-import algeo.determinant.RowReductionDeterminant;
-import algeo.inverse.AdjointInverse;
-import algeo.inverse.AugmentInverse;
-import algeo.spl.Cramer;
-import algeo.spl.Gauss;
-import algeo.spl.GaussJordan;
-import algeo.spl.InverseMethod;
 
 public class Menu {
   private static final Scanner globalScanner = new Scanner(System.in);
@@ -54,27 +49,29 @@ public class Menu {
         case 1 -> {
           splIO();
           menu = -1;
+          waitForEnter();
         }
         case 2 -> {
           determinanIO();
           menu = -1;
+          waitForEnter();
         }
         case 3 -> {
           inverseIO();
           menu = -1;
+          waitForEnter();
         }
-        // case 4 -> {
-        //   interpolasiIO();
+        case 4 -> {
+          interpolasiIO();
+          menu = -1;
+          waitForEnter();
+        }
+        // case 5 -> {
+        //   regresiPolinomialBergandaIO();
         //   menu = -1;
         // }
-        case 5 -> {
-          regresiPolinomialBergandaIO();
-          menu = -1;
-        }
         // case 6 -> {
         //   MatrixOperationIO.run();
-        //   menu = -1;
-        // }
         case 7 -> {
           System.out.print("\nTekan ENTER untuk kembali ke menu...");
           globalScanner.nextLine();
@@ -169,6 +166,7 @@ public class Menu {
 
     } while (menu != 3 && menu != -1);
   }
+
   public static void inverseIO() {
     int menu = -9999;
     do {
@@ -205,14 +203,52 @@ public class Menu {
     } while (menu != 3 && menu != -1);
   }
 
-  public static void interpolasiIO() {}
+  public static void interpolasiIO() {
+    int menu = -9999;
+    do {
+      System.out.println("Metode Interpolasi yang dapat dipilih");
+      System.out.println("---------------------------------------------");
+      System.out.println("1.  Interpolasi Polinomial");
+      System.out.println("2.  Interpolasi splina Bezier kubik");
+      System.out.println("3.  Keluar");
+      System.out.println("---------------------------------------------");
+      System.out.print("\nSilakan pilih metode operasi yang ingin Anda lakukan: ");
+
+      try {
+        menu = globalScanner.nextInt();
+      } catch (Exception e) {
+        System.out.println("Input tidak valid. Silakan masukkan angka.");
+        globalScanner.nextLine();
+        continue;
+      }
+      switch (menu) {
+        case 1 -> {
+          Polinomial.polinomial();
+          menu = -1;
+          waitForEnter();
+        }
+        case 3 -> {
+          System.out.println("Kembali ke menu utama...");
+          waitForEnter();
+          break;
+        }
+        default -> {
+          System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+          waitForEnter();
+        }
+      }
+    } while (menu != 3 && menu != -1);
+  }
 
   public static void regresiPolinomialBergandaIO() {
+    // int menu = -9999;
+    // do {
+    // //isi langsung dengan metode IO regresi polinomial berganda
+    // }
   }
 
   public static void waitForEnter() {
     System.out.println("Tekan ENTER untuk melanjutkan program");
-    globalScanner.nextLine();
     globalScanner.nextLine();
   }
 
@@ -222,4 +258,3 @@ public class Menu {
     }
   }
 }
-
