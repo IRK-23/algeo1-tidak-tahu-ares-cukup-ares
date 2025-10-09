@@ -33,7 +33,7 @@ public class MatrixIO {
 
   public static Matrix inputMatrix(Scanner sc) {
     System.out.println("\n== Input Matriks (n x n) ==");
-    int n = askInt(sc, "Masukkan n (1-" + MAX_MANUAL + "):", 1, MAX_MANUAL);
+    int n = askInt(sc, "Masukkan n (1-" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
     double[][] data = readRows(sc, n, n);
     return new Matrix(data);
   }
@@ -43,6 +43,14 @@ public class MatrixIO {
     int n = askInt(sc, "Masukkan n (1-" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
     double[][] data = readRows(sc, n, n + 1);
     return new Matrix(data);
+  }
+
+  public static Matrix inputRectMatrix(Scanner sc) {
+      System.out.println("\n== Input Matriks Umum (n × m) ==");
+      int rows = askInt(sc, "Masukkan jumlah baris (n, 1–" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+      int cols = askInt(sc, "Masukkan jumlah kolom (m, 1–" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+      double[][] data = readRows(sc, rows, cols);
+      return new Matrix(data);
   }
 
   public static Matrix readMatrixFromUser(Scanner sc) {

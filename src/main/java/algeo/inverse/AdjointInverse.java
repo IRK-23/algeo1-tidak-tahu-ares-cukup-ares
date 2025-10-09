@@ -21,11 +21,12 @@ public final class AdjointInverse {
         if (!A.isSquare()) throw new IllegalArgumentException("Matriks harus merupakan matriks persegi");
 
         int n = A.rows();
-        double det = CofactorDeterminant.of(A, eps);
+        double det = CofactorDeterminant.of(A);
+        System.out.println("Determinan (det(A)): " + NumberFmt.format3(det));
+
         if (Math.abs(det) <= eps) throw new IllegalArgumentException("Matriks singular, tidak memiliki inverse");
 
         Matrix adj = new Matrix(n, n);
-        // adj(A) = transpose dari matrix kofaktor
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 double[][] minor = new double[n-1][n-1];
@@ -42,6 +43,10 @@ public final class AdjointInverse {
                 Matrix m = new Matrix(minor);
                 double cofactor = CofactorDeterminant.of(m, eps);
                 if (((i + j) & 1) != 0) cofactor = -cofactor;
+
+                System.out.println("Kofaktor C[" + (i+1) + "][" + (j+1) + "] = " + m);
+                System.out.println("=" + cofactor);
+
                 adj.set(j, i, cofactor);
             }
         }
@@ -52,6 +57,9 @@ public final class AdjointInverse {
                 inv.set(i, j, adj.get(i, j) / det);
             }
         }
+
+        System.out.println(inv);
+
         return inv;
     }
 

@@ -83,7 +83,7 @@ public final class RowReductionDeterminant {
 
     // Koreksi -0
     if (Math.abs(det) < MatrixOps.EPS) det = 0.0;
-
+    System.out.print("=" + det + "\n");
     return det;
   }
 

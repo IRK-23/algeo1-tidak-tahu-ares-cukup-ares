@@ -2,7 +2,7 @@ package algeo.inverse;
 
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
-import algeo.core.NumberFmt;
+import algeo.determinant.RowReductionDeterminant;
 import algeo.io.MatrixIO;
 
 /**
@@ -19,14 +19,15 @@ public final class AugmentInverse {
         if (A == null) throw new IllegalArgumentException("Matrix A tidak boleh kosong");
         if (!A.isSquare()) throw new IllegalArgumentException("Inverse hanya untuk matriks persegi");
 
-        double det = MatrixOps.determinantOBE(A, pivoting, eps);
+        double det = RowReductionDeterminant.of(A);
         if (Math.abs(det) <= eps) throw new IllegalArgumentException("Matriks singular, tidak memiliki inverse");
 
         int n = A.rows();
         Matrix I = Matrix.identity(n);
         Matrix aug = A.copy().augment(I);
-        MatrixOps.rref(aug, pivoting, eps);
-        Matrix inv = aug.submatrix(0, n-1, n, 2*n-1);
+        System.out.println(aug);
+        Matrix mAug = MatrixOps.rref(aug);
+        Matrix inv = mAug.submatrix(0, n-1, n, 2*n-1);
         return inv;
     }
 
@@ -44,13 +45,8 @@ public final class AugmentInverse {
         try {
             Matrix inv = inverse(A);
             System.out.println("Inverse (augment) =");
-            for (int i = 0; i < inv.rows(); i++) {
-                for (int j = 0; j < inv.cols(); j++) {
-                    System.out.print(NumberFmt.format3(inv.get(i, j)) + (j + 1 < inv.cols() ? " " : ""));
-                }
-                System.out.println();
-            }
-        } catch (IllegalArgumentException ex) {
+            System.out.println(inv);
+                   } catch (IllegalArgumentException ex) {
             System.out.println("Tidak dapat menghitung inverse: " + ex.getMessage());
         }
     }
