@@ -3,11 +3,31 @@ package algeo.spl;
 import algeo.core.*;
 import algeo.determinant.*;
 import algeo.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 public class Cramer {
   public static void cramer() {
     Matrix M = MatrixIO.inputAugmentedMatrix();
-    solveCramer(M);
+    PrintStream originalOut = System.out;
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+    System.setOut(new PrintStream(bos));
+
+    int solutionType = JumlahSolusi.cekJumlahSolusiM(M);
+
+    System.setOut(originalOut);
+
+    if (solutionType == 1) {
+      System.out.println("Solusi tunggal:");
+      solveCramer(M);
+      System.out.println();
+
+    } else { // solutionType == 2
+      System.out.println(
+          "Determinan nol, maka tidak dapat menggunakan Invers, silakan gunakan metode Gauss"
+              + " atau Gauss-Jordan");
+    }
   }
 
   public static void solveCramer(Matrix M) {
