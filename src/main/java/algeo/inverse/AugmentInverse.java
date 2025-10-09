@@ -2,7 +2,6 @@ package algeo.inverse;
 
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
-import algeo.core.NumberFmt;
 import algeo.determinant.RowReductionDeterminant;
 import algeo.io.MatrixIO;
 
