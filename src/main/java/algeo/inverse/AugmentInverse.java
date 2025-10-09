@@ -3,10 +3,12 @@ package algeo.inverse;
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
 import algeo.core.NumberFmt;
+import algeo.determinant.RowReductionDeterminant;
 import algeo.io.MatrixIO;
 
 /**
- * Inverse dengan matriks augmented [A | I] kemudian RREF → [I | A^-1].
+ * Inverse dengan metode augment [A | I] → RREF → [I | A^-1].
+ * Menggunakan determinan dari RowReductionDeterminant untuk cek singularitas.
  */
 public final class AugmentInverse {
     private AugmentInverse() {}
@@ -19,18 +21,22 @@ public final class AugmentInverse {
         if (A == null) throw new IllegalArgumentException("Matrix A tidak boleh kosong");
         if (!A.isSquare()) throw new IllegalArgumentException("Inverse hanya untuk matriks persegi");
 
-        double det = MatrixOps.determinantOBE(A, pivoting, eps);
-        if (Math.abs(det) <= eps) throw new IllegalArgumentException("Matriks singular, tidak memiliki inverse");
+        // gunakan metode OBE untuk menghitung determinan
+        double det = RowReductionDeterminant.of(A);
+        if (Math.abs(det) <= eps)
+            throw new IllegalArgumentException("Matriks singular, tidak memiliki inverse");
 
         int n = A.rows();
         Matrix I = Matrix.identity(n);
         Matrix aug = A.copy().augment(I);
-        MatrixOps.rref(aug, pivoting, eps);
-        Matrix inv = aug.submatrix(0, n-1, n, 2*n-1);
+
+        // ubah ke RREF untuk dapatkan inverse
+        // MatrixOps.rref(aug, pivoting, eps);
+        Matrix inv = aug.submatrix(0, n - 1, n, 2 * n - 1);
         return inv;
     }
 
-    /** CLI helper: input matrix dulu lalu tampilkan inverse (augment method). */
+    /** CLI helper: input matrix dan tampilkan hasil inverse. */
     public static void run() {
         Matrix A = MatrixIO.inputMatrix();
         if (A == null) {

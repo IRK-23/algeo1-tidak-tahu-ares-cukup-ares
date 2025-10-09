@@ -1,10 +1,17 @@
 package algeo.io;
 
-import algeo.determinant.*;
-import algeo.interpolasi.*;
-import algeo.inverse.*;
-import algeo.spl.*;
 import java.util.Scanner;
+
+import algeo.determinant.CofactorDeterminant;
+import algeo.determinant.RowReductionDeterminant;
+import algeo.interpolasi.Polinomial;
+import algeo.inverse.AdjointInverse;
+import algeo.inverse.AugmentInverse;
+import algeo.poisson.PoissonBlend;
+import algeo.spl.Cramer;
+import algeo.spl.Gauss;
+import algeo.spl.GaussJordan;
+import algeo.spl.InverseMethod;
 
 public class Menu {
   private static final Scanner globalScanner = new Scanner(System.in);
@@ -28,6 +35,7 @@ public class Menu {
     System.out.println("5.  Regresi Polinomial Berganda");
     System.out.println("6.  Operasi Standar Matrix");
     System.out.println("7.  Keluar");
+    System.out.println("8.  Poisson Blending");
     System.out.println("---------------------------------------------");
   }
 
@@ -77,7 +85,12 @@ public class Menu {
           globalScanner.nextLine();
           globalScanner.nextLine();
         }
-        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
+        case 5 -> {
+          poissonIO();
+          menu = -1;
+          waitForEnter();
+        }
+        default -> System.out.println("Pilihan tidak valid. Silakan pilih 1-8.");
       }
 
     } while (menu != 7);
@@ -166,6 +179,14 @@ public class Menu {
 
     } while (menu != 3 && menu != -1);
   }
+  public static void poissonIO() {
+  try {
+            PoissonBlend.run();
+          } catch (Exception e) {
+            System.out.println("Terjadi kesalahan pada blending: " + e.getMessage());
+          }
+}
+
 
   public static void inverseIO() {
     int menu = -9999;
