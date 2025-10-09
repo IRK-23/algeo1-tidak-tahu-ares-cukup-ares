@@ -24,7 +24,7 @@ public final class MultivariatePolynomialRegression {
                 if (e == 0) continue;
                 if (!first) sb.append("*");
                 first = false;
-                sb.append("x").append(i + 1);
+                sb.append("x_").append(i + 1);
                 if (e != 1) sb.append("^").append(e);
             }
             return first ? "1" : sb.toString();

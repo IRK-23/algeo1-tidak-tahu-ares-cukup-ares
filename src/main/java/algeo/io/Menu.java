@@ -71,6 +71,10 @@ public class Menu {
           regresiPolinomialBergandaIO();
           menu = -1;
         }
+        // case 6 -> {
+        //   MatrixOperationIO.run();
+        //   menu = -1;
+        // }
         case 7 -> {
           System.out.print("\nTekan ENTER untuk kembali ke menu...");
           globalScanner.nextLine();
@@ -204,10 +208,6 @@ public class Menu {
   public static void interpolasiIO() {}
 
   public static void regresiPolinomialBergandaIO() {
-    int menu = -9999;
-    do {
-    //isi langsung dengan metode IO regresi polinomial berganda
-    }
   }
 
   public static void waitForEnter() {
