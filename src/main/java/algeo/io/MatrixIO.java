@@ -32,15 +32,15 @@ public class MatrixIO {
   }
 
   public static Matrix inputMatrix(Scanner sc) {
-    System.out.println("\n== Input Matriks ==");
-    int n = askInt(sc, "Masukkan ordo n (1.." + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+    System.out.println("\n== Input Matriks (n x n) ==");
+    int n = askInt(sc, "Masukkan n (1-" + MAX_MANUAL + "):", 1, MAX_MANUAL);
     double[][] data = readRows(sc, n, n);
     return new Matrix(data);
   }
 
   public static Matrix inputAugmentedMatrix(Scanner sc) {
-    System.out.println("\n== Input Matriks Augmented (A|b) untuk SPL ==");
-    int n = askInt(sc, "Masukkan jumlah variabel / baris n (1.." + MAX_MANUAL + "): ", 1, MAX_MANUAL);
+    System.out.println("\n== Input Matriks Augmented (n x (n + 1)) untuk SPL ==");
+    int n = askInt(sc, "Masukkan n (1-" + MAX_MANUAL + "): ", 1, MAX_MANUAL);
     double[][] data = readRows(sc, n, n + 1);
     return new Matrix(data);
   }
@@ -107,18 +107,10 @@ public class MatrixIO {
 
   private static double[][] readRows(Scanner sc, int rows, int cols) {
     System.out.println("Masukkan elemen matriks baris demi baris (pisahkan elemen dengan spasi):");
-    if (rows <= 3 && cols <= 3) {
-      System.out.println("Contoh:");
-      for (int i = 0; i < rows; i++) {
-        StringBuilder eg = new StringBuilder();
-        for (int j = 0; j < cols; j++) eg.append((i * cols + j + 1)).append(j + 1 == cols ? "" : " ");
-        System.out.println(eg);
-      }
-    }
+
     double[][] data = new double[rows][cols];
     for (int i = 0; i < rows; i++) {
       while (true) {
-        System.out.print("Baris " + (i + 1) + ": ");
         String line = sc.nextLine().trim();
         if (line.isEmpty()) {
           System.out.println("Baris tidak boleh kosong.");
