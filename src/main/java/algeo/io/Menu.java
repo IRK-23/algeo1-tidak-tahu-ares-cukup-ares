@@ -49,18 +49,22 @@ public class Menu {
         case 1 -> {
           splIO();
           menu = -1;
+          waitForEnter();
         }
         case 2 -> {
           determinanIO();
           menu = -1;
+          waitForEnter();
         }
         case 3 -> {
           inverseIO();
           menu = -1;
+          waitForEnter();
         }
         case 4 -> {
           interpolasiIO();
           menu = -1;
+          waitForEnter();
         }
         // case 5 -> {
         //   regresiPolinomialBergandaIO();
@@ -223,10 +227,12 @@ public class Menu {
         }
         case 3 -> {
           System.out.println("Kembali ke menu utama...");
+          waitForEnter();
           break;
         }
         default -> {
           System.out.println("Pilihan tidak valid. Silakan pilih 1-3.");
+          waitForEnter();
         }
       }
     } while (menu != 3 && menu != -1);
