@@ -18,19 +18,20 @@ public class GaussJordan {
 
     System.setOut(originalOut);
 
-    if (solutionType == 0) {
-      System.out.println("Determinan = 0, Tidak ada solusi.\n");
-
-    } else if (solutionType == 1) {
-      System.out.println("Solusi tunggal:");
-      Matrix mRref = MatrixOps.rref(M);
-      Gauss.finishSPL(mRref);
-
-    } else { // solutionType == 2
-      System.out.println("Solusi banyak:");
-      Matrix mRref = MatrixOps.rref(M);
-      Gauss.finishParametricSPL(mRref);
-    }
+      switch (solutionType) {
+          case 0 -> System.out.println("Determinan = 0, Tidak ada solusi.\n");
+          case 1 ->               {
+                  System.out.println("Solusi tunggal:");
+                  Matrix mRref = MatrixOps.rref(M);
+                  Gauss.finishSPL(mRref);
+              }
+          default ->               {
+                  // solutionType == 2
+                  System.out.println("Solusi banyak:");
+                  Matrix mRref = MatrixOps.rref(M);
+                  Gauss.finishParametricSPL(mRref);
+              }
+      }
   }
 
   public static void makeReductedEchelon(Matrix M) {

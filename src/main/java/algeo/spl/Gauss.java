@@ -20,19 +20,20 @@ public class Gauss {
 
     System.setOut(originalOut);
 
-    if (solutionType == 0) {
-      System.out.println("Determinan = 0, Tidak ada solusi.\n");
-
-    } else if (solutionType == 1) {
-      System.out.println("Solusi tunggal:");
-      Matrix mRef = MatrixOps.ref(M);
-      Gauss.finishSPL(mRef);
-
-    } else { // solutionType == 2
-      System.out.println("Solusi banyak:");
-      Matrix mRef = MatrixOps.ref(M);
-      Gauss.finishParametricSPL(mRef);
-    }
+      switch (solutionType) {
+          case 0 -> System.out.println("Determinan = 0, Tidak ada solusi.\n");
+          case 1 ->               {
+                  System.out.println("Solusi tunggal:");
+                  Matrix mRef = MatrixOps.ref(M);
+                  Gauss.finishSPL(mRef);
+              }
+          default ->               {
+                  // solutionType == 2
+                  System.out.println("Solusi banyak:");
+                  Matrix mRef = MatrixOps.ref(M);
+                  Gauss.finishParametricSPL(mRef);
+              }
+      }
   }
 
   public static void finishSPL(Matrix M) {
