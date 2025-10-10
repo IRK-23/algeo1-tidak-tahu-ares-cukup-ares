@@ -55,4 +55,14 @@ public final class UiPrompts {
             }
         }
     }
+
+    public static boolean askYesNo(Scanner sc, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String ans = sc.nextLine().trim().toLowerCase();
+            if (ans.equals("y")) return true;
+            if (ans.equals("n")) return false;
+            System.out.println("Input tidak valid. Masukkan 'y' atau 'n'.");
+        }
+    }
 }

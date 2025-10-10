@@ -38,7 +38,7 @@ public final class MultivariatePolynomialRegression {
         private final double[] beta;
         private final List<Term> terms;
         private final int degree;
-        private final int k; //jumlah fitur
+        private final int k;
         private final double eps;
 
         private Model(double[] beta, List<Term> terms, int degree, int k, double eps) {
@@ -91,6 +91,23 @@ public final class MultivariatePolynomialRegression {
 
     private MultivariatePolynomialRegression() {}
 
+    // FUNGSI TAMBAHAN: Hitung jumlah suku (terms) untuk k variabel dan derajat d
+    public static int calculateNumberOfTerms(int k, int d) {
+        return binomialCoeff(d + k, k);
+    }
+
+    // Kombinasi C(n, k)
+    private static int binomialCoeff(int n, int k) {
+        if (k > n) return 0;
+        if (k == 0 || k == n) return 1;
+        
+        long result = 1;
+        for (int i = 0; i < k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return (int) result;
+    }
+
     public static Model fit(double[][] Xraw, double[] y, int degree, double eps) {
         if (Xraw == null || Xraw.length == 0) throw new IllegalArgumentException("X kosong");
         final int n = Xraw.length;
@@ -98,6 +115,15 @@ public final class MultivariatePolynomialRegression {
         if (y == null || y.length != n) throw new IllegalArgumentException("y tidak selaras dengan X");
         if (degree < 0) throw new IllegalArgumentException("degree harus >= 0");
         if (k <= 0) throw new IllegalArgumentException("jumlah peubah harus > 0");
+
+        // VALIDASI JUMLAH SAMPEL
+        int p = calculateNumberOfTerms(k, degree);
+        if (n < p) {
+            throw new IllegalArgumentException(
+                String.format("Jumlah sampel tidak cukup! Butuh minimal %d sampel untuk k=%d variabel dan derajat d=%d. Diberikan: %d sampel.",
+                    p, k, degree, n)
+            );
+        }
 
         // Basis & desain X
         List<Term> basis = generateBasis(k, degree);
@@ -142,7 +168,7 @@ public final class MultivariatePolynomialRegression {
 
     private static void generateBasisRecursive(List<Term> out, int[] cur, int idx, int rem) {
         if (idx == cur.length) {
-            out.add(new Term(Arrays.copyOf(cur, cur.length))); // satu term
+            out.add(new Term(Arrays.copyOf(cur, cur.length)));
             return;
         }
         for (int e = 0; e <= rem; e++) {
@@ -215,12 +241,12 @@ public final class MultivariatePolynomialRegression {
     private static double[] solveByGaussJordan(Matrix A, Matrix b, double eps) {
         if (A == null || b == null) throw new IllegalArgumentException("A/b null");
         if (A.rows() != A.cols()) throw new IllegalArgumentException("A harus persegi");
-        if (b.rows() != A.rows() || b.cols() != 1) throw new IllegalArgumentException("b harus vektor kolom n×1");
+        if (b.rows() != A.rows() || b.cols() != 1) throw new IllegalArgumentException("b harus vektor kolom nx1");
 
         final int n = A.rows();
 
         if (algeo.core.MatrixOps.cekRank(A) < n) {
-            throw new ArithmeticException("Matriks singular atau tak berbalik (rank(A) < n).");
+            throw new ArithmeticException("Matriks singular atau tak berbalik (rank(A) < n). Mungkin terjadi multikolinearitas pada data.");
         }
 
         // Bentuk augmented [A | b], RREF-kan
@@ -246,46 +272,153 @@ public final class MultivariatePolynomialRegression {
 
     public static void run(Scanner sc) {
         System.out.println("\n== Regresi Polinomial Berganda ==");
-        System.out.println("Format data: n x (k+1) | kolom 0..k-1 = fitur, kolom k = y");
 
         // baca degree dan eps
-        int degree = UiPrompts.askInt(sc, "Masukkan derajat polinom: ", 0, 9);
-        double eps = UiPrompts.askDouble(sc, "Masukkan eps numerik (contoh 1e-12): ", 0.0, Double.POSITIVE_INFINITY);
+        int degree = UiPrompts.askInt(sc, "Masukkan derajat polinom: ", 0, 4);
+        double eps = 1e-21;
 
         // pilih sumber input
-        UiPrompts.InputChoice ic = UiPrompts.askInputChoice(sc);
         Matrix samples;
-        try {
-            samples = (ic == UiPrompts.InputChoice.FILE)
-                    ? MatrixIO.readMatrixFromFile(UiPrompts.askPath(sc, "Masukkan path file samples (.txt): "))
-                    : MatrixIO.inputRectMatrix(sc);
-        } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
+        int n=-1, k=-1;
+        UiPrompts.InputChoice ic = UiPrompts.askInputChoice(sc);
+        
+        while(true){
+            if (ic == UiPrompts.InputChoice.FILE) {
+                String path = UiPrompts.askPath(sc, "Masukkan path file samples (.txt): ");
+                try {
+                    Object[] data = MatrixIO.readRegressionFromFile(path);
+                    samples = (Matrix) data[0];
+                    int fileDegree = (Integer) data[1];
+                    
+                    n = samples.rows();
+                    k = samples.cols() - 1;
+                    
+                    // Override degree dari file jika valid
+                    degree = fileDegree;
+                    System.out.printf("File berhasil dibaca: %d sampel, %d variabel, derajat %d%n", n, k, degree);
+                    break;
+                } catch (IOException | IllegalArgumentException ex) {
+                    System.out.println("Gagal membaca file: " + ex.getMessage());
+                }
+                
+                boolean retryFile = UiPrompts.askYesNo(sc, "Ingin memilih file lain? (y/n): ");
+                if (retryFile) {
+                    continue;
+                }
+                boolean switchToManual = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
+                if (switchToManual) {
+                    ic = UiPrompts.InputChoice.MANUAL;
+                } else {
+                    System.out.println("Operasi dibatalkan.");
+                    return;
+                }
+            } else { // MANUAL
+                k = UiPrompts.askInt(sc, "Masukkan jumlah peubah k (1..5): ", 1, 5);
+                
+                // Hitung minimal sampel yang dibutuhkan
+                int minSampel = calculateNumberOfTerms(k, degree);
+                System.out.printf("Untuk k=%d variabel dan derajat d=%d, dibutuhkan minimal %d sampel.%n", k, degree, minSampel);
+                
+                n = UiPrompts.askInt(sc, "Masukkan jumlah sampel n (minimal " + minSampel + "): ", minSampel, MatrixIO.MAX_MANUAL);
+                
+                samples = readSamplesManual(sc, n, k);
+                break;
+            }
+        }
+        
+        if (samples == null || n <= 0 || k <= 0) {
+            System.out.println("Gagal memperoleh sampel yang valid. Operasi dibatalkan.");
             return;
         }
-
+        
         // fit
-        MultivariatePolynomialRegression.Model model =
-                MultivariatePolynomialRegression.fit(samples, degree, eps);
+        try {
+            MultivariatePolynomialRegression.Model model =
+                    MultivariatePolynomialRegression.fit(samples, degree, eps);
 
-        // tampilkan & simpan
-        String nl = System.lineSeparator();
-        StringBuilder body = new StringBuilder();
-        body.append("Derajat: ").append(model.degree()).append(nl);
-        body.append("Variabel: ").append(model.variables()).append(nl);
-        body.append("Persamaan: ").append(model.toEquationString()).append(nl).append(nl);
+            // tampilkan & simpan
+            String eq = model.toEquationString();
+            System.out.println("\nPersamaan regresi:");
+            System.out.println(eq);
 
-        double[] beta = model.coefficients();
-        var terms = model.terms();
-        body.append("Koefisien (urut sesuai basis):").append(nl);
-        for (int j = 0; j < beta.length; j++) {
-            body.append(String.format("  %-14s = %.6f%n", terms.get(j).name(), beta[j]));
+            while (true) {
+                System.out.println("\nEvaluasi y untuk satu titik x_t.");
+                System.out.println("Masukkan " + model.variables() + " nilai x_t dipisahkan spasi (atau ketik -9999 untuk selesai):");
+                String line = sc.nextLine().trim();
+                if (line.equals("-9999")) break;
+                if (line.isEmpty()) {
+                    System.out.println("Baris kosong. Coba lagi.");
+                    continue;
+                }
+
+                String[] toks = line.split("\\s+");
+                if (toks.length != model.variables()) {
+                    System.out.println("Butuh tepat " + model.variables() + " nilai. Diberikan: " + toks.length);
+                    continue;
+                }
+
+                try {
+                    double[] xt = new double[model.variables()];
+                    for (int i = 0; i < xt.length; i++) xt[i] = NumberFmt.parseNumber(toks[i]);
+                    double yt = model.predict(xt);
+                    
+                    System.out.print("x_t = (");
+                    for (int i = 0; i < xt.length; i++) {
+                        if (i > 0) System.out.print(", ");
+                        System.out.print(NumberFmt.format3(xt[i]));
+                    }
+                    System.out.println(")  ⇒  y_t = " + NumberFmt.format3(yt));
+                } catch (RuntimeException ex) {
+                    System.out.println("Input tidak valid. Gunakan angka desimal/pecahan yang sah (contoh: 2.5, 3/4).");
+                }
+            }
+
+            String nl = System.lineSeparator();
+            StringBuilder body = new StringBuilder();
+            body.append("Regresi Polinomial Berganda").append(nl);
+            body.append("n = ").append(n).append(", k = ").append(k).append(", m = ").append(model.degree()).append(nl).append(nl);
+
+            body.append("Sampel (setiap baris: x1 ... xk y):").append(nl);
+            body.append(samples).append(nl);
+
+            body.append("Persamaan: ").append(eq).append(nl).append(nl);
+
+            ResultSaver.maybeSaveText(sc, 
+                "regression", 
+                "Hasil Regresi Polinomial Berganda", 
+                body.toString());
+        } catch (IllegalArgumentException | ArithmeticException ex) {
+            System.out.println("ERROR: " + ex.getMessage());
+            System.out.println("Operasi gagal. Silakan coba lagi dengan data yang berbeda.");
         }
+    }
+    
+    private static Matrix readSamplesManual(Scanner sc, int n, int k) {
+        System.out.println("Masukkan " + n + " baris. Setiap baris berisi " + k + " nilai x diikuti 1 nilai y.");
+        System.out.println("Format: x1 x2 ... x" + k + " y");
+        double[][] data = new double[n][k + 1];
 
-        System.out.println("\n" + body);
-        ResultSaver.maybeSaveText(sc, "regression", "Regresi Polinomial Berganda", body.toString());
-
+        for (int i = 0; i < n; i++) {
+            while (true) {
+                System.out.print("Baris " + (i+1) + "/" + n + ": ");
+                String line = sc.nextLine().trim();
+                if (line.isEmpty()) {
+                    System.out.println("Baris tidak boleh kosong. Coba lagi.");
+                    continue;
+                }
+                String[] toks = line.split("\\s+");
+                if (toks.length != k + 1) {
+                    System.out.println("Jumlah nilai pada baris ini harus " + (k + 1) + ". Diberikan: " + toks.length);
+                    continue;
+                }
+                try {
+                    for (int j = 0; j < k + 1; j++) data[i][j] = NumberFmt.parseNumber(toks[j]);
+                    break;
+                } catch (RuntimeException ex) {
+                    System.out.println("Ada token tidak valid. Contoh valid: 2,5 | 2.5 | 3/4 | -7/3. Ulangi baris.");
+                }
+            }
+        }
+        return new Matrix(data);
     }
 }
-
-

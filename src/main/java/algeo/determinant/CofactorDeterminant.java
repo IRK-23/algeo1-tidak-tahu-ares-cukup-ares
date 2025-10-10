@@ -1,9 +1,14 @@
 package algeo.determinant;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 import algeo.core.Matrix;
 import algeo.core.MatrixOps;
 import algeo.core.NumberFmt;
 import algeo.io.MatrixIO;
+import algeo.io.ResultSaver;
+import algeo.io.UiPrompts;
 
 /** Determinan menggunakan ekspansi kofaktor */
 public final class CofactorDeterminant {
@@ -94,16 +99,40 @@ public final class CofactorDeterminant {
     }
 
     /** CLI helper: input matrix dulu lalu tampilkan determinan (kofaktor). */
+    private static final Scanner sc = new Scanner(System.in);
+
     public static void run() {
-        Matrix M = MatrixIO.inputMatrix();
-        if (M == null) {
-            System.out.println("Input dibatalkan.");
-            return;
+        System.out.println("\n=== Determinan (Metode Kofaktor) ===");
+
+        UiPrompts.InputChoice choice = UiPrompts.askInputChoice(sc);
+        Matrix A = null;
+        while (A == null) {
+            if (choice == UiPrompts.InputChoice.MANUAL) {
+                A = MatrixIO.inputMatrix(sc);
+            } else {
+                String path = UiPrompts.askPath(sc, "Masukkan path file determinan (.txt): ");
+                try {
+                    A = MatrixIO.readDeterminantFromFile(path);
+                    System.out.println("File berhasil dibaca: " + A.rows() + "x" + A.cols());
+                } catch (IOException | IllegalArgumentException ex) {
+                    System.out.println("Gagal membaca path: " + ex.getMessage());
+                    boolean retry = UiPrompts.askYesNo(sc, "Coba file lain? (y/n): ");
+                    if (!retry) {
+                        boolean sw = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
+                        if (sw) choice = UiPrompts.InputChoice.MANUAL; else { System.out.println("Operasi dibatalkan."); return; }
+                    }
+                }
+            }
         }
-        if (!M.isSquare()) {
-            System.out.println("Matriks harus persegi untuk menghitung determinan.");
-            return;
-        }
-        of(M);
+
+        double det = CofactorDeterminant.of(A);
+        String nl = System.lineSeparator();
+        StringBuilder out = new StringBuilder();
+        out.append("Metode pencarian determinan: Kofaktor").append(nl).append(nl);
+        out.append("Input yang digunakan:").append(nl).append(A).append(nl);
+        out.append("Hasil determinan: ").append(NumberFmt.format3(det)).append(nl);
+
+        System.out.println("\nDet(A) = " + NumberFmt.format3(det));
+        ResultSaver.maybeSaveText(sc, "det_kofaktor", "Hasil Determinan – Metode Kofaktor", out.toString());
     }
 }

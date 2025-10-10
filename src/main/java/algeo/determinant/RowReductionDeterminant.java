@@ -1,5 +1,8 @@
 package algeo.determinant;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 import algeo.core.*;
 import algeo.io.*;
 
@@ -94,18 +97,50 @@ public final class RowReductionDeterminant {
     return det;
   }
 
+  private static final Scanner sc = new Scanner(System.in);
+
   public static void run() {
-    Matrix M = MatrixIO.inputMatrix();
-    if (M == null) {
-      System.out.println("Input dibatalkan.");
-      return;
+    System.out.println("\n=== Determinan (Metode OBE/Reduksi Baris) ===");
+
+    UiPrompts.InputChoice choice = UiPrompts.askInputChoice(sc);
+    Matrix M = null;
+
+    // Loop input sampai dapat matriks valid atau user batal
+    while (M == null) {
+      if (choice == UiPrompts.InputChoice.MANUAL) {
+        M = MatrixIO.inputMatrix(sc);
+      } else {
+        String path = UiPrompts.askPath(sc, "Masukkan path file determinan (.txt): ");
+        try {
+          M = MatrixIO.readDeterminantFromFile(path);
+          System.out.println("File berhasil dibaca: " + M.rows() + "x" + M.cols());
+        } catch (IOException | IllegalArgumentException ex) {
+          System.out.println("Gagal menyimpan: " + ex.getMessage());
+          boolean retry = UiPrompts.askYesNo(sc, "Coba file lain? (y/n): ");
+          if (!retry) {
+            boolean sw = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
+            if (sw) choice = UiPrompts.InputChoice.MANUAL; else { System.out.println("Operasi dibatalkan."); return; }
+          }
+        }
+      }
     }
+
     if (!M.isSquare()) {
       System.out.println("Matriks harus persegi untuk menghitung determinan.");
       return;
     }
+
     double det = of(M);
     System.out.println("Determinan (OBE) = " + NumberFmt.format3(det));
+
+    // Susun teks simpan sesuai spesifikasi
+    String nl = System.lineSeparator();
+    StringBuilder out = new StringBuilder();
+    out.append("Metode pencarian determinan: OBE (Reduksi Baris)").append(nl).append(nl);
+    out.append("Input yang digunakan:").append(nl).append(M).append(nl);
+    out.append("Hasil determinan: ").append(NumberFmt.format3(det)).append(nl);
+
+    ResultSaver.maybeSaveText(sc, "det_obe", "Hasil Determinan – Metode OBE", out.toString());
   }
 }
 
