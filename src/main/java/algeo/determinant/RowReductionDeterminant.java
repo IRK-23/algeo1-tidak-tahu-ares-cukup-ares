@@ -80,10 +80,17 @@ public final class RowReductionDeterminant {
       System.out.print(NumberFmt.format3(diagVal));
       if (i != (n - 1)) System.out.print(" * ");
     }
+    
+    System.out.println("\n");
 
-    // Koreksi -0
-    if (Math.abs(det) < MatrixOps.EPS) det = 0.0;
-    System.out.print("=" + det + "\n");
+    if (Math.abs(det) < MatrixOps.EPS) {
+      det = 0.0;
+      System.out.println("Determinan = 0\n");
+    } else {
+      System.out.println("Determinan tidak nol, tetapi sangat kecil\n");
+    }
+
+    System.out.println("Hasil akhir: det(A) = " + NumberFmt.format3(det));
     return det;
   }
 
@@ -101,3 +108,4 @@ public final class RowReductionDeterminant {
     System.out.println("Determinan (OBE) = " + NumberFmt.format3(det));
   }
 }
+

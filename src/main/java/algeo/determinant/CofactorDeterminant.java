@@ -25,11 +25,15 @@ public final class CofactorDeterminant {
         StringBuilder equation = new StringBuilder("det(A) = ");
         double result = detRecursive(A, eps, equation);
         
+        System.out.println("\n" + equation.toString() + " = " + NumberFmt.format3(result));
+
         if (Math.abs(result) < eps) {
             result = 0.0;
+            System.out.println("Determinan = 0\n");
+        } else {
+            System.out.println("Determinan tidak nol, tetapi sangat kecil\n");
         }
 
-        System.out.println("\n" + equation.toString() + " = " + NumberFmt.format3(result));
         System.out.println("Hasil akhir: det(A) = " + NumberFmt.format3(result));
         return result;
     }
