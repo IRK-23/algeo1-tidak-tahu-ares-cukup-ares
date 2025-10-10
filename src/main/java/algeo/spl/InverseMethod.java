@@ -5,8 +5,9 @@ import algeo.inverse.AugmentInverse;
 import algeo.io.MatrixIO;
 import algeo.io.ResultSaver;
 import algeo.io.UiPrompts;
-
+import java.io.ByteArrayOutputStream; // <-- TAMBAHKAN INI
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class InverseMethod {
@@ -31,7 +32,11 @@ public class InverseMethod {
           boolean retry = UiPrompts.askYesNo(sc, "Coba file lain? (y/n): ");
           if (!retry) {
             boolean sw = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
-            if (sw) choice = UiPrompts.InputChoice.MANUAL; else { System.out.println("Operasi dibatalkan."); return; }
+            if (sw) choice = UiPrompts.InputChoice.MANUAL;
+            else {
+              System.out.println("Operasi dibatalkan.");
+              return;
+            }
           }
         }
       }
@@ -44,9 +49,10 @@ public class InverseMethod {
 
     int sol = JumlahSolusi.cekJumlahSolusiM(M);
     if (sol != 1) {
-      String msg = (sol == 0)
-        ? "Tidak ada solusi. det(A)=0 atau sistem inkonsisten."
-        : "Sistem memiliki banyak solusi. Metode matriks balikan tidak dapat digunakan.";
+      String msg =
+          (sol == 0)
+              ? "Tidak ada solusi. det(A)=0 atau sistem inkonsisten."
+              : "Sistem memiliki banyak solusi. Metode matriks balikan tidak dapat digunakan.";
       System.out.println("\n" + msg);
       out.append("Hasil SPL: ").append(msg).append(nl);
     } else {
@@ -62,8 +68,10 @@ public class InverseMethod {
           x[i] = s;
         }
         StringBuilder solStr = new StringBuilder();
-        for (int i = 0; i < n; i++) solStr.append("x").append(i + 1).append(" = ").append(NumberFmt.format3(x[i])).append(nl);
-        System.out.println("\nSolusi tunggal:"); System.out.println(solStr);
+        for (int i = 0; i < n; i++)
+          solStr.append("x").append(i + 1).append(" = ").append(NumberFmt.format3(x[i])).append(nl);
+        System.out.println("\nSolusi tunggal:");
+        System.out.println(solStr);
         out.append("Hasil SPL (solusi tunggal):").append(nl).append(solStr);
       } catch (IllegalArgumentException ex) {
         String msg = "Matriks A tidak invertible. Gunakan Gauss/Gauss–Jordan.";
@@ -72,7 +80,8 @@ public class InverseMethod {
       }
     }
 
-    ResultSaver.maybeSaveText(sc, "spl_inverse", "Hasil SPL – Metode Matriks Balikan", out.toString());
+    ResultSaver.maybeSaveText(
+        sc, "spl_inverse", "Hasil SPL – Metode Matriks Balikan", out.toString());
   }
 
   public static void solveInverse(Matrix M) {
