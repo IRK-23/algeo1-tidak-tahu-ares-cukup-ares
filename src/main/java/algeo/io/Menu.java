@@ -1,12 +1,18 @@
 package algeo.io;
 
-import algeo.regression.MultivariatePolynomialRegression;
-import algeo.determinant.*;
-import algeo.interpolasi.*;
-import algeo.inverse.*;
-import algeo.spl.*;
-
 import java.util.Scanner;
+
+import algeo.determinant.CofactorDeterminant;
+import algeo.determinant.RowReductionDeterminant;
+import algeo.interpolasi.BezierSpline;
+import algeo.interpolasi.Polinomial;
+import algeo.inverse.AdjointInverse;
+import algeo.inverse.AugmentInverse;
+import algeo.regression.MultivariatePolynomialRegression;
+import algeo.spl.Cramer;
+import algeo.spl.Gauss;
+import algeo.spl.GaussJordan;
+import algeo.spl.InverseMethod;
 
 public class Menu {
   private static final Scanner globalScanner = new Scanner(System.in);
@@ -224,6 +230,11 @@ public class Menu {
       switch (menu) {
         case 1 -> {
           Polinomial.polinomial();
+          menu = -1;
+          waitForEnter();
+        }
+        case 2 -> { 
+          BezierSpline.cubicBezierSpline(); 
           menu = -1;
           waitForEnter();
         }
