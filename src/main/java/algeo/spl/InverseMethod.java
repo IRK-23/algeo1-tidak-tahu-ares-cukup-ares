@@ -35,7 +35,6 @@ public class InverseMethod {
     int rows = M.rows();
     int cols = M.cols();
 
-    // ekspektasi: augmented matrix dengan kolom = rows + 1
     if (cols != rows + 1) {
       System.out.println("Input harus berupa matriks augmented (n x (n+1)).");
       return;
@@ -52,7 +51,19 @@ public class InverseMethod {
     int n = A.rows();
 
     try {
+      PrintStream originalOut = System.out;
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+      System.setOut(new PrintStream(bos));
+
       Matrix inv = AugmentInverse.inverse(A);
+
+      System.setOut(originalOut);
+
+      System.out.println("Kalikan matriks invers A dengan B");
+      System.out.println(inv);
+
+      System.out.println(B);
 
       for (int i = 0; i < n; i++) {
         double xi = 0.0;

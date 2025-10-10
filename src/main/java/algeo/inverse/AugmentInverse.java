@@ -19,14 +19,14 @@ public final class AugmentInverse {
     if (A == null) throw new IllegalArgumentException("Matrix A tidak boleh kosong");
     if (!A.isSquare()) throw new IllegalArgumentException("Inverse hanya untuk matriks persegi");
 
-        PrintStream originalOut = System.out;
+    PrintStream originalOut = System.out;
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-System.setOut(new PrintStream(bos));
+    System.setOut(new PrintStream(bos));
 
     double det = RowReductionDeterminant.of(A);
 
-         System.setOut(originalOut);
+    System.setOut(originalOut);
 
     if (Math.abs(det) <= eps)
       throw new IllegalArgumentException("Matriks singular, tidak memiliki inverse");
@@ -36,12 +36,7 @@ System.setOut(new PrintStream(bos));
     Matrix aug = A.copy().augment(I);
     System.out.println(aug);
 
-   
-    System.setOut(new PrintStream(bos));
-
     Matrix mAug = MatrixOps.rref(aug);
-
-    System.setOut(originalOut);
 
     Matrix inv = mAug.submatrix(0, n - 1, n, 2 * n - 1);
     return inv;
@@ -67,4 +62,3 @@ System.setOut(new PrintStream(bos));
     }
   }
 }
-

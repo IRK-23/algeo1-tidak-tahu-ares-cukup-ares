@@ -1,0 +1,635 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- PENGATURAN PAKET ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[indonesian]{babel}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry} % Mengatur margin
+\usepackage{fancyhdr} % Untuk membuat header dan footer
+\usepackage{graphicx} % Untuk menyisipkan gambar
+\usepackage{lastpage} % Untuk mendapatkan jumlah halaman total
+\usepackage{lmodern} % Font yang mirip dengan Computer Modern
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{titlesec} % For custom section titles
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color} % Diperlukan untuk warna
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{soul}
+\usepackage{longtable}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\definecolor{customgray}{HTML}{DEDEDE}
+\sethlcolor{customgray}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\setlist{nosep}
+
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+\titlespacing*{\subsection}{0pt}{1em}{0pt}
+
+\graphicspath{{attachment/}}
+% --- PENGATURAN HEADER DAN FOOTER ---
+
+\fancyhf{} % Menghapus semua pengaturan header dan footer default
+
+\rhead{IF2123 Aljabar Linier dan Geometri \\ Laporan Tugas Besar 1 \\ Semester I 2025/2026} % Header kanan
+
+\rfoot{Halaman \thepage\ dari 100}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\onehalfspacing
+
+\setlength{\itemsep}{-5em}   % Mengurangi jarak antar item
+\setlength{\parskip}{0em}   % Menghilangkan spasi antar paragraf
+
+\begin{document}
+
+% Center everything
+\begin{center}
+
+\thispagestyle{empty}
+
+{\Large \bfseries Laporan Tugas Besar 1}
+
+\vspace{0.5cm}
+
+IF2123 ALJABAR LINIER DAN GEOMETRI
+
+\vspace{0.5cm}
+
+Sistem Persamaan Linier, Determinan, dan Penerapannya
+
+\vspace{0.5cm}
+
+SEMESTER 1 TAHUN 2025/2026
+
+\vspace{5cm}
+
+\includegraphics[width=0.4\textwidth]{HMIF.png}
+
+\vspace{5cm}
+
+Laboratorium Ilmu dan Rekayasa Komputasi
+
+Program Studi Teknik Informatika
+
+Sekolah Teknik Elektro dan Informatika
+
+Institut Teknologi Bandung
+
+\end{center}
+
+\pagestyle{fancy}
+\setlength{\headheight}{25pt}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Pendahuluan}
+
+Aplikasi seperti Photomath telah menjadi solusi populer dalam membantu menyelesaikan berbagai per-
+masalahan matematika, termasuk soal matriks dan sistem persamaan linier yang kompleks. Kemampuan
+aplikasi tersebut dalam memberikan langkah-langkah penyelesaian secara otomatis tidak terlepas dari
+penerapan algoritma dan konsep matematika yang kuat, khususnya aljabar linier.
+
+Aljabar linier merupakan salah satu cabang matematika yang sangat penting dalam pengembangan
+ilmu komputer, teknik, fisika, ekonomi, dan berbagai bidang lainnya. Dalam kehidupan sehari-hari,
+konsep matriks, dan sistem persamaan linier sering kali diaplikasikan untuk menyelesaikan berbagai
+persoalan nyata, mulai dari pemodelan data, analisis statistik, hingga simulasi sistem dinamis.
+
+Pada tugas besar ini, Anda akan mengimplementasikan berbagai metode penyelesaian sistem persamaan linier, perhitungan determinan, pencarian invers matriks, interpolasi polinomial, interpolasi kurva B´ezier kubik, dan regresi polinomial menggunakan bahasa pemrograman Java dalam bentuk pustaka (library) yang dapat digunakan secara modular dan terdokumentasi dengan baik.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{photomath.png}
+    \caption{Aplikasi Photomath (kiri) dan diagram rangkaian listrik (kanan)}
+\end{figure}
+
+Penyelesaian sistem persamaan linier, misalnya, sangat krusial dalam pemodelan sirkuit listrik, analisis struktur bangunan, hingga pemrosesan citra digital. Sementara itu, interpolasi dan regresi polinomial digunakan untuk memperkirakan nilai di antara data yang tersedia atau memprediksi tren data di masa
+depan. 
+
+Melalui tugas besar ini, diharapkan Anda tidak hanya memahami teori di balik metode-metode tersebut, tetapi juga mampu mengimplementasikannya secara nyata yang dapat digunakan untuk menyelesaikan berbagai kasus uji (test cases) yang telah disediakan.
+
+Secara formal, tujuan dari tugas besar ini adalah:
+\begin{itemize}
+    \item Mengimplementasikan berbagai metode penyelesaian sistem persamaan linier, perhitungan determinan, invers matriks, interpolasi, dan regresi polinomial secara mandiri dalam bahasa Java.
+    \item Membuat pustaka (library) yang dapat digunakan secara modular dan terdokumentasi dengan baik.image
+    \item Mengintegrasikan pustaka yang dibuat ke dalam sebuah program yang dapat menerima masukan dari pengguna dan menampilkan hasilnya dengan format yang jelas.
+    \item Menguji pustaka yang dibuat pada berbagai kasus uji dan menganalisis hasilnya.
+\end{itemize}
+
+Dengan demikian, tugas besar ini diharapkan dapat menjadi sarana pembelajaran yang efektif dalam memahami dan mengaplikasikan konsep-konsep aljabar linier secara komputasional, serta membekali Anda dengan keterampilan praktis yang sangat dibutuhkan di dunia profesional.
+
+\newpage
+    
+\section{Dasar Teori}
+\subsection{Sistem Persamaan Linier}
+Sistem Persamaan Linier (SPL) adalah himpunan berhingga dari persamaan-persamaan linear dengan variabel-variabel yang sama. SPL dapat direpresentasikan dalam bentuk perkalian matriks $Ax = b$ atau dalam bentuk matriks augmented. Bentuk umum SPL dengan $m$ persamaan dan $n$ variabel adalah
+
+\[
+\begin{cases}
+\begin{array}{lcl}
+a_{11}x_1 + a_{12}x_2 + a_{13}x_3 + \cdots + a_{1n}x_n &=& b_1 \\
+a_{21}x_1 + a_{22}x_2 + a_{23}x_3 + \cdots + a_{2n}x_n &=& b_2 \\
+\vdots & & \vdots \\
+a_{n1}x_1 + a_{n2}x_2 + a_{n3}x_3 + \cdots + a_{nn}x_n &=& b_n
+\end{array}
+\end{cases}
+\]
+
+Dalam bentuk matriks, SPL dapat ditulis sebagai:
+\[
+\begin{bmatrix}
+a_{11} & a_{12} & \dots & a_{1n} \\ a_{21} & a_{22} & \dots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \dots & a_{mn}
+\end{bmatrix}
+\begin{bmatrix} x_{1} \\ x_{2} \\ \vdots \\ x_{n}
+\end{bmatrix} =
+\begin{bmatrix}
+b_{1} \\ b_{2} \\ \vdots \\ b_{m}
+\end{bmatrix}    
+\]
+
+Dalam hal ini, matriks $A$ disebut matriks koefisien, $x$ adalah vektor variabel, dan $b$ adalah vektor konstanta.
+
+Sebuah SPL dapat memiliki tiga kemungkinan solusi:
+\begin{enumerate}
+    \item Solusi tunggal
+    \item Solusi banyak (Tak hingga)
+    \item Tidak ada solusi
+\end{enumerate}
+
+Untuk menyelesaikan sebuah SPL dapat digunakan beberapa metode yang umum, yaitu
+\begin{enumerate}
+    \item Eliminasi Gauss. Metode ini mengubah matriks augmented menjadi bentuk eselon baris menggunakan OBE. Setelah matriks berada dalam bentuk eselon baris, solusinya dapat ditemukan dengan proses substitusi mundur (dari bawah).
+    \item Eliminasi Gauss-Jordan. Metode ini mengubah matriks augmenten menjadi bentuk eselon baris tereduksi menggunakan OBE. Setelah matriks berada dalam bentuk eselon baris tereduksi. Solusinya langsung dapat dibaca dari kolom konstanta, tanpa perlu substitusi mundur lagi.
+    \item Kaidah Cramer. Metode ini hanya dapat digunakan untuk SPL dengan matriks koefisien persegi dan $D \ne 0$ Solusi untuk setiap variabel ($x_i$) dihitung dengan rumus $x_i = \frac{\det{A_i}}{\det{A}}$ di mana $A_i$ merupakan matriks yang dibentuk dengan mengganti kolom ke-$i$ dari matriks koefisien $A$ dengan konstanta $b$.
+    \item Metode Matriks Balikan. Metode ini juga hanya berlaku untuk SPL dengan matriks koefisien persegi dan non-singular. Solusi dapat ditemukan dengan mengalikan invers dari matriks koefisien ($A^{-1}$) dengan vektor konstanta ($b$), sehingga $A^{-1}b$.
+\end{enumerate}
+
+\subsection{Determinan Matriks}
+Determinan adalah sebuah nilai skalar khusus yang dapat dihitung dari elemen-elemen sebuah matriks persegi. Nilai ini sangat penting karena dapat memberikan informasi mengenai properti matriks tersebut. Determinan dari sebuah matriks A biasa dinotasikan sebagai $\det(A)$ atau $|A|$. Salah satu kegunaan utama dari determinan adalah untuk mengetahui apakah sebuah matriks memiliki invers. Sebuah matriks persegi hanya akan memiliki invers jika dan hanya jika nilai determinannya tidak sama dengan nol ($\det(A) \neq 0$). Matriks yang memiliki invers disebut juga sebagai matriks \textit{invertible} atau \textit{non-singular}
+
+Terdapat dua metode yang dapat digunakan untuk menghitung determinan, yaitu Metode Ekspansi Kofaktor dan Metode Reduksi Baris.
+
+\subsubsection{Metode Ekspansi Kofaktor}
+Metode ini bekerja dengan cara mereduksi perhitungan determinan matriks berukuran $n \times n$ menjadi perhitungan determinan dari beberapa submatriks yang berukuran lebih kecil, yaitu $(n-1) \times (n-1)$. Proses ini dilakukan secara rekursif hingga mencapai matriks berukuran $2 \times 2$ yang determinannya dapat dihitung dengan mudah.
+
+Langkah-langkah utamanya melibatkan konsep \textit{minor} dan \textit{kofaktor}.
+
+Minor ($M_{ij}$) dari elemen $a_{ij}$ adalah determinan dari submatriks yang terbentuk setelah baris ke-i dan kolom ke-j dari matriks A dihilangkan. Kofaktor ($C_{ij}$) dari elemen $a_{ij}$ dihitung dengan rumus:
+$$
+C_{ij} = (-1)^{i+j} M_{ij}
+$$
+
+Untuk menghitung determinan, kita dapat memilih satu baris atau satu kolom mana pun dari matriks tersebut. Determinan matriks A dihitung dengan menjumlahkan hasil perkalian setiap elemen pada baris (atau kolom) tersebut dengan kofaktornya masing-masing.
+
+Ekspansi sepanjang baris ke-i:
+    $$det(A) = \sum_{j=1}^{n} a_{ij}C_{ij} = a_{i1}C_{i1} + a_{i2}C_{i2} + \dots + a_{in}C_{in}$$
+Ekspansi sepanjang kolom ke-j:
+    $$det(A) = \sum_{i=1}^{n} a_{ij}C_{ij} = a_{1j}C_{1j} + a_{2j}C_{2j} + \dots + a_{nj}C_{nj}$$
+
+Untuk efisiensi, disarankan memilih baris atau kolom yang memiliki elemen nol paling banyak, karena akan mengurangi jumlah perhitungan yang perlu dilakukan.
+
+---
+
+\subsubsection{Metode Reduksi Baris}
+
+Metode Reduksi Baris memanfaatkan Operasi Baris Elementer (OBE) untuk mengubah matriks awal menjadi bentuk \textbf{matriks segitiga atas} (atau bawah). Determinan dari matriks segitiga adalah hasil perkalian dari semua elemen pada diagonal utamanya. Proses ini lebih efisien untuk matriks berukuran besar dibandingkan ekspansi kofaktor.
+
+Ada tiga jenis Operasi Baris Elementer, dan masing-masing memiliki pengaruh yang berbeda terhadap nilai determinan:
+
+\begin{enumerate}
+    \item Menukar dua baris: Jika matriks B dihasilkan dari matriks A dengan menukar dua baris, maka $det(B) = -det(A)$.
+    \item Mengalikan satu baris dengan skalar tak-nol ($k$): Jika matriks B dihasilkan dari matriks A dengan mengalikan satu barisnya dengan skalar $k$, maka $det(B) = k \cdot det(A)$.
+    \item Menambahkan kelipatan satu baris ke baris lain: Jika matriks B dihasilkan dari matriks A dengan menambahkan kelipatan satu baris ke baris lainnya, maka nilai determinannya tidak berubah, $det(B) = det(A)$.
+\end{enumerate}
+
+Dengan menerapkan operasi-operasi ini, matriks awal diubah menjadi bentuk eselon baris atau matriks segitiga. Nilai determinan matriks asli kemudian dapat ditemukan dengan melacak perubahan yang terjadi selama proses reduksi baris.
+
+\subsection{Invers Matriks}
+[Invers dari sebuah matriks persegi A adalah matriks lain, yang dinotasikan sebagai $A^{-1}$, yang bila dikalikan dengan matriks A akan menghasilkan matriks identitas ($I$). Hubungan ini berlaku dua arah, sehingga memenuhi properti:
+$$
+AA^{-1} = A^{-1}A = I
+$$
+di mana $I$ adalah matriks identitas.
+
+Syarat utama agar sebuah matriks memiliki invers adalah **determinannya tidak boleh nol** ($det(A) \neq 0$). Matriks yang memenuhi syarat ini disebut sebagai matriks \textit{invertible}atau \textit{non-singular}. Sebaliknya, jika determinannya nol, matriks tersebut disebut matriks \textbf{singular} dan tidak memiliki invers.
+
+Terdapat dua metode yang diimplementasikan untuk mencari invers matriks.
+
+\subsubsection{Metode Matriks Adjoin}
+
+Metode ini menggunakan hubungan antara invers matriks, determinan, dan matriks adjoin. Matriks adjoin, dinotasikan sebagai $adj(A)$, adalah transpos dari matriks kofaktor.
+
+Langkah-langkah untuk menemukan invers dengan metode ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Hitung Determinan: Pertama, hitung determinan dari matriks A, yaitu $det(A)$. Jika hasilnya adalah 0, matriks tidak memiliki invers dan proses berhenti.
+    \item Tentukan Matriks Kofaktor: Buat sebuah matriks baru yang setiap elemennya ($C_{ij}$) adalah kofaktor dari elemen matriks A yang bersesuaian ($a_{ij}$).
+    \item Transpos Matriks Kofaktor untuk Mendapatkan Adjoin: Lakukan transpos pada matriks kofaktor yang telah dibuat untuk mendapatkan matriks adjoin, $adj(A)$.
+    \item Hitung Invers: Invers matriks A dapat dihitung menggunakan rumus:
+    $$A^{-1} = \frac{1}{det(A)} adj(A)$$
+
+\end{enumerate}
+
+\subsubsection{Metode Eliminasi Gauss-Jordan (Metode Augment)}
+
+Metode ini merupakan cara yang lebih efisien untuk matriks berukuran besar. Prosesnya adalah dengan "menggabungkan" atau melakukan augmentasi matriks A dengan matriks identitas I yang seukuran, membentuk matriks baru $[A|I]$.
+
+Langkah-langkahnya adalah sebagai berikut:
+\begin{enumerate}
+    \item Bentuk Matriks Augmentasi: Buat sebuah matriks baru dengan meletakkan matriks A di sebelah kiri dan matriks identitas I di sebelah kanan, menjadi $[A|I]$.
+    \item Lakukan Operasi Baris Elementer (OBE): Terapkan serangkaian Operasi Baris Elementer pada seluruh matriks augmentasi dengan tujuan untuk mengubah bagian kiri (yang tadinya matriks A) menjadi matriks identitas I.
+    \item Setelah bagian kiri berhasil diubah menjadi matriks identitas, bagian kanan dari matriks augmentasi secara otomatis akan menjadi invers dari matriks A. Bentuk akhirnya adalah $[I|A^{-1}]$.
+\end{enumerate}
+
+Jika dalam proses OBE ditemukan satu baris yang seluruh elemennya nol pada bagian kiri, itu menandakan bahwa matriks A adalah matriks singular ($det(A)=0$) dan tidak memiliki invers.  
+
+\subsection{Interpolasi Polinomial}
+
+Interpolasi polinomial adalah metode untuk menemukan sebuah fungsi polinomial unik, $P_n(x)$, yang melewati serangkaian titik data yang telah ditentukan. Jika kita memiliki $n+1$ titik data $(x_0, y_0), (x_1, y_1), \dots, (x_n, y_n)$, maka kita dapat menemukan sebuah polinomial berderajat paling tinggi $n$ yang melalui semua titik tersebut.
+
+Bentuk umum dari polinomial ini adalah:
+$$
+P_n(x) = a_0 + a_1x + a_2x^2 + \dots + a_nx^n
+$$
+
+Tujuan utama dari metode ini adalah untuk menentukan nilai koefisien-koefisien $a_0, a_1, \dots, a_n$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{attachment/image.png}
+    \caption{Visualisasi Interpolasi Polinomial}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Proses Pembentukan Sistem Persamaan Linier (SPL)}
+
+Untuk menemukan koefisien-koefisien tersebut, kita menyubstitusikan setiap titik data $(x_i, y_i)$ ke dalam persamaan polinomial umum. Proses ini akan menghasilkan sebuah Sistem Persamaan Linier (SPL).
+
+Sebagai contoh, jika kita memiliki $n+1$ titik, substitusi akan menghasilkan sistem berikut:
+$$
+\begin{cases}
+    a_0 + a_1x_0 + a_2x_0^2 + \dots + a_nx_0^n = y_0 \\
+    a_0 + a_1x_1 + a_2x_1^2 + \dots + a_nx_1^n = y_1 \\
+    \vdots \\
+    a_0 + a_1x_n + a_2x_n^2 + \dots + a_nx_n^n = y_n
+\end{cases}
+$$
+
+Sistem ini dapat ditulis dalam bentuk perkalian matriks $A\mathbf{x} = \mathbf{b}$, di mana $x$ adalah vektor kolom berisi koefisien yang tidak diketahui ($a_0, a_1, \dots, a_n$); $b$ adalah vektor kolom berisi nilai $y$ dari setiap titik data ($y_0, y_1, \dots, y_n$); dan $A$ adalah matriks Vandermonde yang berisi pangkat-pangkat dari nilai $x$ setiap titik.
+
+$$
+\begin{bmatrix}
+    1 & x_0 & x_0^2 & \dots & x_0^n \\
+    1 & x_1 & x_1^2 & \dots & x_1^n \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    1 & x_n & x_n^2 & \dots & x_n^n
+\end{bmatrix}
+\begin{bmatrix}
+    a_0 \\
+    a_1 \\
+    \vdots \\
+    a_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+    y_0 \\
+    y_1 \\
+    \vdots \\
+    y_n
+\end{bmatrix}
+$$
+
+Sistem Persamaan Linier yang terbentuk ini kemudian dapat diselesaikan untuk menemukan nilai koefisien-koefisien tersebut. 
+
+\subsection{Interpolasi Splina B´ezier Kubik}
+Ketika menggunakan pen tool di Adobe Photoshop/Illustrator, kita akan berhadapan dengan kurva B´ezier, atau lebih spesifiknya kurva B´ezier kubik. Kurva ini sangat berguna untuk menggambar bentuk-bentuk halus dan kompleks dengan kontrol yang presisi.
+
+Kurva B´ezier kubik adalah kurva parametrik yang didefinisikan oleh empat titik kontrol yang mempengaruhi bentuk kurva tersebut. Titik kontrol pertama (P0) dan terakhir (P3) adalah titik awal dan akhir kurva, sedangkan titik-titik kontrol lainnya (P1 dan P2) menentukan arah dan kelengkungan kurva. Secara matematis, kurva B´ezier kubik dapat ditulis sebagai persamaan parametrik Secara matematis, kurva ini didefinisikan oleh persamaan parametrik berikut, dengan parameter $t$ yang nilainya berkisar dari 0 hingga 1:
+$$
+B(t) = (1-t)^3P_0 + 3t(1-t)^2P_1 + 3t^2(1-t)P_2 + t^3P_3, \quad 0 \le t \le 1
+$$
+
+Tantangan utama dalam interpolasi ini adalah menemukan lokasi titik-titik kontrol ($B_i$) yang tepat agar rangkaian kurva Bézier yang terbentuk melewati semua titik interpolasi ($S_i$) yang diberikan.
+
+Masalah ini dapat disederhanakan menjadi penyelesaian sebuah SPL. SPL ini didapatkan dari hubungan antara titik-titik $S_i$ dan titik-titik kontrol $B_i$. Bentuk SPL tersebut adalah:
+$$
+\begin{cases}
+    4b_1 + b_2 &= 6s_1 - s_0 \\
+    b_1 + 4b_2 + b_3 &= 6s_2 \\
+    b_2 + 4b_3 + b_4 &= 6s_3 \\
+    \vdots \\
+    b_{n-2} + 4b_{n-1} &= 6s_{n-1} - s_n
+\end{cases},
+$$
+
+\newpage
+Bentuk matriks dari SPL tersebut adalah sebagai berikut:
+
+$$
+\begin{bmatrix}
+    4 & 1 & & & \\
+    1 & 4 & 1 & & \\
+    & \ddots & \ddots & \ddots & \\
+    & & 1 & 4 & 1 \\
+    & & & 1 & 4
+\end{bmatrix}
+\begin{bmatrix}
+    b_1 \\
+    b_2 \\
+    \vdots \\
+    b_{n-2} \\
+    b_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+    6s_1 - s_0 \\
+    6s_2 \\
+    \vdots \\
+    6s_{n-2} \\
+    6s_{n-1} - s_n
+\end{bmatrix}
+$$
+
+Karena setiap titik kontrol dan titik interpolasi memiliki dua komponen (koordinat x dan y), sistem persamaan di atas harus dipecah menjadi dua SPL yang terpisah, satu untuk semua komponen x, dan satu lagi untuk semua komponen y. Dengan menyelesaikan kedua SPL tersebut, kita akan mendapatkan koordinat (x,y) yang lengkap untuk semua titik kontrol yang dibutuhkan untuk membentuk kurva yang mulus dan sesuai.
+
+\subsection{Regresi Polinomial Berganda (Multivariate Polynomial Regression)}
+Diberikan $n$ titik data $(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)$ dengan $x_i$ adalah variabel dan $y_i$ adalah hasil pengukuran ke-$i$ ($1 \le i \le n$), regresi linear sederhana bertujuan untuk menemukan garis lurus
+\[ y = \beta_0 + \beta_1 x + \epsilon \]
+yang paling sesuai dengan data tersebut dengan $\epsilon$ adalah galatnya. Namun, dalam banyak kasus, besaran yang kita amati bisa dipengaruhi oleh lebih dari satu variabel. Untuk mengatasi hal ini, kita dapat menggunakan regresi linier berganda (\textit{multivariate linear regression}).
+
+Misalnya, jika $y$ dipengaruhi oleh tiga variabel independen $x_1, x_2,$ dan $x_3$, kita dapat memodelkan hubungan tersebut dengan persamaan linier berganda
+\[
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \epsilon, 
+\]
+
+dengan $\epsilon$ adalah galat (\textit{error}) yang mengikuti distribusi normal dengan rata-rata nol dan varians konstan. Tugas kita adalah mengestimasi nilai koefisien $\beta_0, \beta_1, \beta_2,$ dan $\beta_3$ berdasarkan data yang diberikan. Secara umum, andaikata ada $n$ variabel independen $x_1, x_2, \dots, x_n$, maka persamaan regresi linier berganda dapat dituliskan sebagai
+\[
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_n x_n + \epsilon 
+\]
+
+sehingga jika kita memiliki $m$ titik data dan $x_{ij}$ adalah nilai dari variabel $x_j$ pada titik data ke-$i$ serta $y_i$ dan $\epsilon_i$ adalah nilai hasil pengukuran dan galatnya pada titik data ke-$i$, kita dapat menuliskan sistem persamaan linear berikut untuk $m$ titik data,
+
+\[
+\begin{bmatrix}
+    y_1 \\
+    y_2 \\
+    \vdots \\
+    y_m
+\end{bmatrix}_{m \times 1}
+=
+\begin{bmatrix}
+    1 & x_{11} & x_{12} & \dots & x_{1n} \\
+    1 & x_{21} & x_{22} & \dots & x_{2n} \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    1 & x_{m1} & x_{m2} & \dots & x_{mn}
+\end{bmatrix}_{m \times (n+1)}
+\begin{bmatrix}
+    \beta_0 \\
+    \beta_1 \\
+    \vdots \\
+    \beta_n
+\end{bmatrix}_{(n+1) \times 1}
++
+\begin{bmatrix}
+    \epsilon_1 \\
+    \epsilon_2 \\
+    \vdots \\
+    \epsilon_m
+\end{bmatrix}_{m \times 1},
+\]
+
+atau
+\[ Y = X\beta + \epsilon, \]
+dengan matriks $Y$ adalah vektor hasil pengukuran, $X$ adalah matriks desain, $\beta$ adalah vektor koefisien, dan $\epsilon$ adalah vektor galat.
+
+Tugas kita pada dasarnya adalah mengestimasi nilai vektor koefisien $\hat{\beta}$ seakurat mungkin, atau dengan kata lain, dengan galat sekecil mungkin. Metode umum yang digunakan adalah metode kuadrat terkecil (\textit{least squares}) yang meminimalkan jumlah kuadrat galat, yaitu $||\epsilon||^2 = ||y - X\beta||^2$. Dengan metode ini, kita dapat menemukan solusi untuk $\hat{\beta}$ dengan menyelesaikan persamaan normal berikut:
+\[ X^T X \hat{\beta} = X^T y, \]
+atau
+\begin{equation}
+\hat{\beta} = (X^T X)^{-1} X^T y. \tag{1}
+\end{equation}
+
+Sekarang, bagaimana jika hubungan antara $y$ dan variabel-variabel independennya tidak linier? Salah satu pendekatan yang dapat kita gunakan adalah \textbf{regresi polinomial berganda} (\textit{multivariate polynomial regression}). Idenya masih mirip: mencari fungsi polinomial yang kurvanya paling sesuai dengan data yang diberikan. Namun, kali ini akan terdapat variabel interaksi, yakni variabel yang merupakan hasil kali dari beberapa variabel independen. Misalnya, untuk tiga variabel independen $x_1, x_2,$ dan $x_3$ dan derajat 3, fungsi polinomial yang kita hasilkan bisa saja berbentuk
+
+\begin{align*}
+y =  &\beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \beta_4x_1^2 + \beta_5x_1x_2 + \beta_6x_1x_3 + \beta_7x_2^2 + \beta_8x_2x_3 + \beta_9x_3^2 + \beta_{10}x_1^3 \\
+&+ \beta_{11}x_1^2x_2 + \beta_{12}x_1^2x_3 + \beta_{13}x_1x_2^2 + \beta_{14}x_1x_2x_3 + \beta_{15}x_1x_3^2 + \beta_{16}x_2^3 + \beta_{17}x_2^2x_3 + \beta_{18}x_2x_3^2 + \beta_{19}x_3^3 + \epsilon.
+\end{align*}
+
+Secara umum, jika kita memiliki $k$ variabel independen dan ingin membuat polinomial dengan derajat $d$, jumlah total suku dalam polinomial tersebut adalah $p = \binom{d+k}{k}$. Lantas, bagaimana cara kita menemukan seluruh koefisien $\beta_0, \beta_1, \dots, \beta_p$?
+
+Kita bisa mengadopsi pendekatan serupa dengan yang kita gunakan pada regresi linier berganda. Kali ini, variabel-variabel seperti $x_1^2, x_1x_2, x_1^3,$ dan sebagainya akan dianggap sebagai variabel independen yang berbeda. Dengan demikian, kita dapat menyusun sistem persamaan linear yang mirip dengan yang sebelumnya, tetapi dengan lebih banyak kolom pada matriks desain $X$ untuk mengakomodasi semua suku dalam polinomial. Setelah itu, kita dapat menggunakan metode kuadrat terkecil untuk menemukan estimasi koefisien $\hat{\beta}$ (persamaannya sama persis seperti pada regresi linier berganda).
+
+Misalnya, jika kita memiliki lima sampel data dan tiga variabel independen ($k=3$) dan ingin membuat polinomial dengan derajat dua ($d=2$), maka jumlah total suku dalam polinomial tersebut adalah $\binom{2+3}{3} = 10$ dan matriks desain $X$ akan berbentuk seperti ini:
+\[
+X = 
+\begin{bmatrix}
+1 & x_{11} & x_{12} & x_{13} & x_{11}^2 & x_{11}x_{12} & x_{11}x_{13} & x_{12}^2 & x_{12}x_{13} & x_{13}^2 \\
+1 & x_{21} & x_{22} & x_{23} & x_{21}^2 & x_{21}x_{22} & x_{21}x_{23} & x_{22}^2 & x_{22}x_{23} & x_{23}^2 \\
+1 & x_{31} & x_{32} & x_{33} & x_{31}^2 & x_{31}x_{32} & x_{31}x_{33} & x_{32}^2 & x_{32}x_{33} & x_{33}^2 \\
+1 & x_{41} & x_{42} & x_{43} & x_{41}^2 & x_{41}x_{42} & x_{41}x_{43} & x_{42}^2 & x_{42}x_{43} & x_{43}^2 \\
+1 & x_{51} & x_{52} & x_{53} & x_{51}^2 & x_{51}x_{52} & x_{51}x_{53} & x_{52}^2 & x_{52}x_{53} & x_{53}^2
+\end{bmatrix},
+\]
+yang sebenarnya analog dengan matriks desain untuk regresi linier berganda
+\[
+X = 
+\begin{bmatrix}
+1 & x_{11} & x_{12} & x_{13} & x_{14} & x_{15} & x_{16} & x_{17} & x_{18} & x_{19} \\
+1 & x_{21} & x_{22} & x_{23} & x_{24} & x_{25} & x_{26} & x_{27} & x_{28} & x_{29} \\
+1 & x_{31} & x_{32} & x_{33} & x_{34} & x_{35} & x_{36} & x_{37} & x_{38} & x_{39} \\
+1 & x_{41} & x_{42} & x_{43} & x_{44} & x_{45} & x_{46} & x_{47} & x_{48} & x_{49} \\
+1 & x_{51} & x_{52} & x_{53} & x_{54} & x_{55} & x_{56} & x_{57} & x_{58} & x_{59}
+\end{bmatrix},
+\]
+dengan $x_{ij}$ adalah nilai dari suku ke-$j$ pada titik data ke-$i$. Pada intinya, cukup gunakan persamaan (1) untuk menemukan estimasi koefisien $\hat{\beta}$.
+
+\newpage
+
+\section{Implementasi}
+Pada tugas besar ini, kami membagi fungsi-fungsi yang ada secara modular dalam tujuh \textit{folder} besar dan satu \textit{main}. \textit{Folder} tersebut adalah sebagai berikut:
+
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth} {c X X}
+        \toprule
+        \textbf{Folder} & \textbf{Deskripsi} & \textbf{File di dalamnya} \\ 
+        \midrule
+        Utama & ADT Matriks, Operasi Dasar pada Matriks, Formatting Luaran & Matrix, MatrixOps, NumberFmt \\
+        \midrule
+        
+        Determinan & \textit{Method} untuk mencari determinan matriks & CofactorDeterminant, RowReductionDeterminant \\
+        \midrule
+
+        SPL & \textit{Method} untuk menyelesaikan SPL dalam bentuk matriks  & Cramer, Gauss, GaussJordan, InverseMethod, JumlahSolusi \\
+        \midrule
+
+        Invers & \textit{Method} untuk mencari invers dari sebuah matriks & AdjointInverse, AugmentInverse\\
+        \midrule
+
+        Interpolasi & \textit{Method} untuk mencari fungsi interpolasi dari titik-titik sampel & Polinomial, BezierSpline \\
+        \midrule
+        
+        Regresi & \textit{Method} untuk mencari  persamaan regresi dari titik-titik sampel & MultivariatePolynomialRegression \\
+        \midrule
+        
+        IO & Fungsi pembantu untuk \textit{input} dan \textit{output} pada fungsi-fungsi lain & MatrixIO, Menu, ResultSaver, UiPrompts \\
+        
+        \bottomrule
+    \end{tabularx}
+    \caption{Gambaran modularitas program}
+    \label{tab:placeholder}
+\end{table}
+
+\subsection{Alur Program}
+Saat program dieksekusi menggunakan \hl{mvn exec:java}, program akan dimulai dengan dari kelas \hl{App.java}, di mana \hl{main} memanggil \hl{Menu.choice()}. \textit{Class} \hl{Menu.java} berfungsi untuk menampilkan menu utama berisikan pilihan-pilihan untuk menu yang dapat digunakan oleh pengguna. Setiap \textit{input} dan \textit{output} data yang dilakukan di masing-masing metode dalam kalkulator, program menggunakan \textit{class} dalam folder IO. Dari menu, pengguna dapat memilih pilihan modul dan metode yang diinginkan untuk menghitung sebuah operasi matriks. Modul-modul ini disimpan pada masing-masing folder, seperti Determinan, SPL, Invers, Interpolasi, dan Regresi. 
+
+Masing-masing modul yang telah diimplementasikan menggunakan fungsi-fungsi yang diimplementasikan pada folder Utama. Folder ini berisikan struktur data matriks dan operasi-operasi dasar yang digunakan pada matriks untuk menghitung modul lain.
+
+\newpage
+
+\subsection{Implementasi Modul}
+\subsubsection{Core/Utama}
+
+Pada modul \hl{Core}, terdapat tiga \textit{Class} di dalamnya, yaitu Matrix.java, MatrixOps.java, NumberFmt.java. Matriks pada program ini dibuat sebagai \textit{wrapper} dari sebuah struktur data \textit{list of double} dua dimensi (\hl{double[][]})
+
+\vspace{1.5pt}
+\textbf{Daftar Fungsi/\textit{Method} pada Matrix.java}
+\begin{longtable}{p{5cm} p{5cm} p{5cm}}
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endhead
+
+\bottomrule
+\caption{Implementasi pada \textit{class} Matrix} \\
+\endlastfoot
+
+Matrix(int rows, int cols) & Konstruktor untuk membentuk matriks berukuran (rows $\times$ cols) & Validasi rows, cols > 0 \\
+\midrule
+Matrix(double[][] data) & Konstruktor untuk membentuk matriks berdasarkan sebuah list dua dimensi & Validasi tiap baris memiliki kolom yang sama \\
+\midrule
+Matrix identity(int n) & Konstruktor matriks identitas berukuran $n \times n$ & Set Elemen (i, i) dengan 1 dan sisanya 0 \\
+\midrule
+double get(int r, int c) & Mengembalikan elemen ke (r, c) & - \\
+\midrule
+void set(int r, int c, double val) & Mengubah elemen ke (r, c) dengan val & - \\
+\midrule
+Matrix copy() & Mengembalikan matriks $M'$ dengan elemen yang sama dengan $M$ & Menggunakan for loop untuk menyalin elemen-elemen matriks \\
+\midrule
+Matrix transpose() & Menghasilkan matriks transpose $M^T$ dari matriks $M$ & Menukar elemen (i, j) dari sebuah matriks menjadi elemen (j, i) pada matriks baru \\
+\midrule
+Matrix submatrix(int r0, int r1, int c0, int c1) & Menghasilkan upamatriks dari baris $r_0$ sampai $r_1$ dan kolom $c_0$ sampai $c_1$ & Menggunakan for loop untuk menyalin elemen-elemen matriks berdasarkan potongan baris dan kolom \\
+\midrule 
+Matrix augment(Matrix B) & Menghasilkan matriks augmented baru $[A|B]$ & Menyalin matriks $B$ sebagai kolom terakhir dari matriks $A$ \\
+\midrule
+void swapRows(int r1, int r2) & Menukar baris $r_1$ dengan $r_2$ pada sebuah matriks & Metode penukaran menggunakan variabel \hl{double[] tmp} \\
+\midrule
+void scaleRow(int r, double k) & Mengalikan semua elemen pada baris $r$ dengan skala $k$ & Menggunakan for loop untuk mengalikan masing-masing elemen pada baris \\
+\midrule
+void addRowMultiple(int r, int src, double k) & Menambahkan semua elemen pada baris $r$ dengan $k \times src$ & Menggunakan for loop untuk menambahkan masing-masing elemen pada baris \\
+
+\end{longtable}
+
+\vspace{1.5pt}
+\textbf{Daftar Fungsi/\textit{Method} pada MatrixOps.java}
+\begin{longtable}{p{5cm} p{5cm} p{5cm}}
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endhead
+
+\bottomrule
+\caption{Implementasi pada \textit{class} MatrixOps} \\
+\endlastfoot
+
+Matrix ref(Matrix M) & Menghasilkan matriks yang sudah diubah dalam bentuk Matriks Eselon Baris (\textit{Row Echelon Form (REF)}) & Menggunakan pivot untuk berganti baris dan menentukan elemen yang dijadikan \textit{leading one}, setelah kolom sudah terdapat \textit{leading one}, jadikan nol elemen di bawahnya \\
+\midrule
+Matrix rref(Matrix M) & Menghasilkan matriks yang sudah diubah dalam bentuk Matriks Eselon Baris Tereduksi (\textit{Reducted Row Echelon Form (RREF)}) & Memanggil ref(Matrix M), lalu menjadikan nol semua elemen di atas \textit{leading one} \\
+\midrule
+int cekRank(Matrix A) & Mengembalikan jumlah baris yang \textit{linear independent} pada matriks $A$ (Singkatnya, fungsi ini tidak menghitung jumlah baris yang seluruh elemennya berkelipatan & Menggunakan ref(Matrix A), lalu mencari baris yang seluruh elemennya nol \\
+
+\end{longtable}
+
+\vspace{1.5pt}
+\textbf{Daftar Fungsi/\textit{Method} pada NumberFmt.java}
+\begin{longtable}{p{5cm} p{5cm} p{5cm}}
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Method} & \textbf{Deskripsi} & \textbf{Cara Kerja} \\ 
+\midrule
+\endhead
+
+\bottomrule
+\caption{Implementasi pada \textit{class} NumberFmt} \\
+\endlastfoot
+
+String format3(double x) & Melakukan format agar angka $x$ memiliki tiga angka di belakang koma & String.format ke "\%.3f" \\
+\midrule
+double parseNumber(String token) & Mengubah input pecahan, menjadi desimal & Mendeteksi "/" pada input, jika terdeteksi ubah string $x/y$ menjadi hasil desimal dari $x$ dibagi $y$ \\
+
+\end{longtable}
+
+\subsubsection{Determinan}
+\subsubsection{SPL}
+\subsubsection{Invers}
+\subsubsection{Interpolasi}
+\subsubsection{Regresi}
+\subsubsection{IO}
+
+\section{Eksperimen}
+\section{Penutup}
+\section*{Daftar Pustaka}
+\section*{Lampiran}
+
+\end{document}
+
