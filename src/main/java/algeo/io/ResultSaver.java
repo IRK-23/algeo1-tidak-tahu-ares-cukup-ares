@@ -13,6 +13,12 @@ import java.util.Scanner;
 public final class ResultSaver {
     private ResultSaver() {}
 
+    /**
+     * Menentukan direktori output sesuai spesifikasi.
+     * Prioritas:
+     * 1. Environment variable ALGEO_OUT_DIR (jika ada)
+     * 2. test/output (relatif dari project root)
+     */
     private static Path resolveOutDir() {
         String env = System.getenv("ALGEO_OUT_DIR");
         if (env != null && !env.isBlank()) {
@@ -20,7 +26,7 @@ public final class ResultSaver {
         }
         // Sesuai struktur project: test/output
         Path projectRoot = Paths.get(System.getProperty("user.dir"));
-        return projectRoot.resolve("src").resolve("test").resolve("java").resolve("output")
+        return projectRoot.resolve("test").resolve("output")
                           .toAbsolutePath()
                           .normalize();
     }
@@ -35,6 +41,7 @@ public final class ResultSaver {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
     }
 
+    // Sanitasi nama prefix menjadi aman untuk nama file di Windows/Linux/Mac
     private static String safePrefix(String prefix) {
         String p = (prefix == null || prefix.isBlank()) ? "result" : prefix.trim();
         // ganti karakter ilegal dengan underscore
@@ -47,6 +54,11 @@ public final class ResultSaver {
         return dir.resolve(name);
     }
 
+    /**
+     * Menyimpan teks ke file dengan format:
+     * [title]
+     * [body]
+     */
     public static Path saveText(String prefix, String title, String body) {
         try {
             Path p = buildPath(prefix);
@@ -98,9 +110,9 @@ public final class ResultSaver {
         if (askSave(sc)) {
             try {
                 Path out = saveText(prefix, title, body);
-                System.out.println("Hasil berhasil disimpan ke: " + out.toAbsolutePath());
+                System.out.println("✓ Hasil berhasil disimpan ke: " + out.toAbsolutePath());
             } catch (RuntimeException e) {
-                System.out.println("Gagal menyimpan: " + e.getMessage());
+                System.out.println("✗ Gagal menyimpan: " + e.getMessage());
             }
         } else {
             System.out.println("Hasil tidak disimpan.");
@@ -111,9 +123,9 @@ public final class ResultSaver {
         if (askSave(sc)) {
             try {
                 Path out = saveMatrix(prefix, title, m);
-                System.out.println("Hasil berhasil disimpan ke: " + out.toAbsolutePath());
+                System.out.println("✓ Hasil berhasil disimpan ke: " + out.toAbsolutePath());
             } catch (RuntimeException e) {
-                System.out.println("Gagal menyimpan: " + e.getMessage());
+                System.out.println("✗ Gagal menyimpan: " + e.getMessage());
             }
         } else {
             System.out.println("Hasil tidak disimpan.");
@@ -124,9 +136,9 @@ public final class ResultSaver {
         if (askSave(sc)) {
             try {
                 Path out = saveLines(prefix, title, lines);
-                System.out.println("Hasil berhasil disimpan ke: " + out.toAbsolutePath());
+                System.out.println("✓ Hasil berhasil disimpan ke: " + out.toAbsolutePath());
             } catch (RuntimeException e) {
-                System.out.println("Gagal menyimpan: " + e.getMessage());
+                System.out.println("✗ Gagal menyimpan: " + e.getMessage());
             }
         } else {
             System.out.println("Hasil tidak disimpan.");

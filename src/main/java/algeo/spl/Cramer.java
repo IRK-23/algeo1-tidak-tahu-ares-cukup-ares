@@ -24,9 +24,9 @@ public class Cramer {
         String path = UiPrompts.askPath(sc, "Masukkan path file SPL (.txt): ");
         try {
           M = MatrixIO.readSPLFromFile(path);
-          System.out.println("File berhasil dibaca: " + M.rows() + "x" + M.cols() + " matriks augmented");
+          System.out.println("✓ File berhasil dibaca: " + M.rows() + "×" + M.cols() + " matriks augmented");
         } catch (IOException | IllegalArgumentException ex) {
-          System.out.println("Gagal membaca file: " + ex.getMessage());
+          System.out.println("✗ Gagal membaca file: " + ex.getMessage());
           boolean retry = UiPrompts.askYesNo(sc, "Coba file lain? (y/n): ");
           if (!retry) {
             boolean switchManual = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
@@ -53,26 +53,29 @@ public class Cramer {
     output.append(M.toString()).append(nl);
     output.append(nl);
     
-    if (solutionType == 0) {
-      String msg = "Tidak ada solusi (sistem inkonsisten).";
-      System.out.println("\n" + msg);
-      output.append("Hasil: ").append(msg).append(nl);
-      
-    } else if (solutionType == 2) {
-      String msg = "Sistem memiliki banyak solusi (infinite solutions).\n" +
-                   "Kaidah Cramer hanya berlaku untuk sistem dengan solusi tunggal.\n" +
-                   "Silakan gunakan metode Gauss atau Gauss-Jordan.";
-      System.out.println("\n" + msg);
-      output.append("Hasil: ").append(msg).append(nl);
-      
-    } else { // solutionType == 1
-      System.out.println("\nSolusi tunggal ditemukan:");
-      output.append("Hasil: Solusi Tunggal").append(nl).append(nl);
-      
-      String solution = solveCramer(M);
-      System.out.println(solution);
-      output.append(solution);
-    }
+      switch (solutionType) {
+          case 0 ->               {
+                  String msg = "Tidak ada solusi (sistem inkonsisten).";
+                  System.out.println("\n" + msg);
+                  output.append("Hasil: ").append(msg).append(nl);
+              }
+          case 2 ->               {
+                  String msg = """
+                               Sistem memiliki banyak solusi (infinite solutions).
+                               Kaidah Cramer hanya berlaku untuk sistem dengan solusi tunggal.
+                               Silakan gunakan metode Gauss atau Gauss-Jordan.""";
+                  System.out.println("\n" + msg);
+                  output.append("Hasil: ").append(msg).append(nl);
+              }
+          default -> {
+              // solutionType == 1
+              System.out.println("\nSolusi tunggal ditemukan:");
+              output.append("Hasil: Solusi Tunggal").append(nl).append(nl);
+              String solution = solveCramer(M);
+              System.out.println(solution);
+              output.append(solution);
+          }
+      }
     
     // Save hasil
     ResultSaver.maybeSaveText(sc, "spl_cramer", "Hasil SPL - Kaidah Cramer", output.toString());

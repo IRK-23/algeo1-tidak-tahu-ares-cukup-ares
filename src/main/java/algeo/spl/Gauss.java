@@ -25,9 +25,9 @@ public class Gauss {
         String path = UiPrompts.askPath(sc, "Masukkan path file SPL (.txt): ");
         try {
           M = MatrixIO.readSPLFromFile(path);
-          System.out.println("File berhasil dibaca: " + M.rows() + "x" + M.cols() + " matriks augmented");
+          System.out.println("✓ File berhasil dibaca: " + M.rows() + "×" + M.cols() + " matriks augmented");
         } catch (IOException | IllegalArgumentException ex) {
-          System.out.println("Gagal membaca file: " + ex.getMessage());
+          System.out.println("✗ Gagal membaca file: " + ex.getMessage());
           boolean retry = UiPrompts.askYesNo(sc, "Coba file lain? (y/n): ");
           if (!retry) {
             boolean switchManual = UiPrompts.askYesNo(sc, "Beralih ke input manual? (y/n): ");
